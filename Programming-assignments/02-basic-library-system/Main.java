@@ -4,18 +4,21 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+        Library libraryLog = new Library(100);
+
         Library library = new Library(100);
 
         library.addBook("The Hobbit", "J.R.R. Tolkien", 2);
         library.addBook("1984", "George Orwell", 1);
-        library.addBook("To Kill a Mockingbird", "Harper Lee", 3);
-        library.addBook("The Catcher in the Rye", "J.D. Salinger", 4);
-        library.addBook("Harry Potter and the Philosopher's Stone", "J.K. Rowling", 5);
+        library.addBook("To Kill", "Harper Lee", 3);
+        library.addBook("The Catcher", "J.D. Salinger", 4);
+        library.addBook("Harry Potter", "J.K. Rowling", 5);
         library.addBook("The Great Gatsby", "F. Scott Fitzgerald", 1);
         library.addBook("Moby Dick", "Herman Melville", 0);
         library.addBook("Pride and Prejudice", "Jane Austen", 2);
         library.addBook("The Lord of the Rings", "J.R.R. Tolkien", 1);
         library.addBook("Brave New World", "Aldous Huxley", 0);
+
 
         int choice;
         String title;
@@ -43,12 +46,18 @@ public class Main {
                 case 2:
                     System.out.println("Enter the book's title: ");
                     title = scanner.nextLine();
+                    System.out.println("Enter the book's author: ");
+                    author = scanner.nextLine();
                     System.out.println("Enter the quantity: ");
                     quantity = scanner.nextInt();
+
+                    // logic
                     library.borrowBook(title, quantity);
+                    libraryLog.addBook(title, author, quantity);
 
                     // clear variables
                     title = "";
+                    author = "";
                     quantity = 0;
                     break;
 
@@ -72,8 +81,12 @@ public class Main {
                 case 4:
                     System.out.println("Enter the book's title: ");
                     title = scanner.nextLine();
+                    System.out.println("Enter the book's author: ");
+                    author = scanner.nextLine();
                     System.out.println("Enter the quantity: ");
+
                     quantity = scanner.nextInt();
+
                     library.returnBook(title, quantity);
 
                     // clear variables
