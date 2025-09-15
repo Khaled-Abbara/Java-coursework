@@ -190,6 +190,11 @@ class Library {
             }
         }
 
+        if (loggedBook == null) {
+            System.out.println("The title or author is incorrect!");
+            return;
+        }
+
         // logic
         targetBook.decreaseQuantity(quantity);
         loggedBook.increaseQuantity(quantity);
@@ -242,6 +247,8 @@ class Library {
     // utility methods
 
     public void viewAllBooks() {
+        System.out.println("\n\n");
+
         for (Book book : books) {
             if (book != null) {
                 System.out.println(book.toString());
@@ -250,6 +257,8 @@ class Library {
     }
 
     public void viewAllLogs() {
+        System.out.println("\n\n");
+
         for (Book book : records) {
             if (book != null) {
                 System.out.println(book.toString());
