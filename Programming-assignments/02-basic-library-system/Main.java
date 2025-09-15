@@ -135,19 +135,19 @@ class Library {
         System.out.println("Library is full. Cannot add more books.");
 
         // Step 1: check if book already exists
-        for (int i = 0; i < books.length; i++) {
-            if (books[i] != null &&
-                books[i].title.equalsIgnoreCase(title) &&
-                books[i].author.equalsIgnoreCase(author)) {
-                books[i].increaseQuantity(quantity);
+        for (int i = 0; i < records.length; i++) {
+            if (records[i] != null &&
+                records[i].title.equalsIgnoreCase(title) &&
+                records[i].author.equalsIgnoreCase(author)) {
+                records[i].increaseQuantity(quantity);
                 return; // done
             }
         }
 
         // Step 2: find first empty slot
-        for (int i = 0; i < books.length; i++) {
-            if (books[i] == null) {
-                books[i] = new Book(title, author, quantity);
+        for (int i = 0; i < records.length; i++) {
+            if (records[i] == null) {
+                records[i] = new Book(title, author, quantity);
                 return; // done
             }
         }
