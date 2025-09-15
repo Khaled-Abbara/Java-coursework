@@ -8,7 +8,6 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Library libraryLog = new Library(100);
         Library library = new Library(100);
 
         library.addBook("The Hobbit", "J.R.R. Tolkien", 2);
@@ -29,40 +28,34 @@ public class Main {
             System.out.println("\n\n");
             System.out.println("======| Library Menu |======");
             System.out.println("1. View all books");
-            System.out.println("2. Borrow a book");
-            System.out.println("3. Add a book");
+            System.out.println("2. Add a book");
+            System.out.println("3. Borrow a book");
             System.out.println("4. Return a book");
-            System.out.println("5. Exit");
+            System.out.println("5. View all logs");
+            System.out.println("6. Exit");
             System.out.print("Enter your choice: ");
             choice = scanner.nextInt();
             scanner.nextLine(); // consume newline
 
             switch (choice) {
-                // view books
-                case 1:
+                case 1: // view books
                     library.viewAllBooks();
                     break;
 
-                // borrow books
-                case 2:
+                case 2: // add books
                     getBookDetails();
 
-                    // logic
-                    library.borrowBook(title, quantity);
-                    libraryLog.addBook(title, author, quantity);
-
-                    // clear variables
-                    clearVariables();
-                    break;
-
-                // add books
-                case 3:
-                    getBookDetails();
-
-                    // logic
                     library.addBook(title, author, quantity);
 
-                    // clear variables
+                    clearVariables();
+                    break;
+                
+                
+                case 3: // borrow books
+                    getBookDetails();
+
+                    library.borrowBook(title, author, quantity);
+
                     clearVariables();
                     break;
 
@@ -70,27 +63,21 @@ public class Main {
                 case 4:
                     getBookDetails();
 
-                    // logic
-                    if (libraryLog.doesExist(title, author, quantity)) {
+                    library.returnBook(title, author, quantity);
 
-                        library.returnBook(title, quantity);
-                        libraryLog.returnBook(title, quantity);
-                        System.out.println("Book Sucessfully returned!");
-
-                    } else {
-                        System.out.println("Incorrect book details, or Book does not belong to the library!");
-                        
-                    }
-
-                    // clear variables
                     clearVariables();
+                    break;
+
+
+                case 5:
+                    library.viewAllLogs();
                     break;
 
                 default:
                     System.out.println("Invalid choice. Try again.");
                     break;
             }
-        } while (choice != 5);
+        } while (choice != 6);
 
         System.out.println("See you again!");
         scanner.close();
@@ -127,23 +114,41 @@ class Library {
         
         // We are adding both in the logs and the books
 
+        // Step 1: check if book already exists
         for (int i = 0; i < books.length; i++) {
-            if (books[i] == null) {
-                books[i] = new Book(title, author, quantity);
-                break;
-
-            } else {
+            if (books[i] != null &&
+                books[i].title.equalsIgnoreCase(title) &&
+                books[i].author.equalsIgnoreCase(author)) {
                 books[i].increaseQuantity(quantity);
+                return; // done
             }
         }
 
-        for (int i = 0; i < records.length; i++) {
-            if (records[i] == null) {
-                records[i] = new Book(title, author, quantity);
-                break;
+        // Step 2: find first empty slot
+        for (int i = 0; i < books.length; i++) {
+            if (books[i] == null) {
+                books[i] = new Book(title, author, quantity);
+                return; // done
+            }
+        }
 
-            } else {
-                records[i].increaseQuantity(quantity);
+        System.out.println("Library is full. Cannot add more books.");
+
+        // Step 1: check if book already exists
+        for (int i = 0; i < books.length; i++) {
+            if (books[i] != null &&
+                books[i].title.equalsIgnoreCase(title) &&
+                books[i].author.equalsIgnoreCase(author)) {
+                books[i].increaseQuantity(quantity);
+                return; // done
+            }
+        }
+
+        // Step 2: find first empty slot
+        for (int i = 0; i < books.length; i++) {
+            if (books[i] == null) {
+                books[i] = new Book(title, author, quantity);
+                return; // done
             }
         }
     }
@@ -153,22 +158,25 @@ class Library {
         Book targetBook = null;
 
         for (Book book : books) {
-            if (book.title.equals(title) && book.author.equals(author) && book.quantity == quantity) {
+            if (book.title.equalsIgnoreCase(title) && book.author.equalsIgnoreCase(author)) {
                 targetBook = book;
                 break;
             }
         }
 
         if (targetBook == null) {
-            System.out.println("0");
+            System.out.println("The title or author is incorrect!");
+            return;
         }
 
         if (targetBook.quantity <= 0) {
-            System.out.println("0");
+            System.out.println("The quantity can't be zero or less!");
+            return;
         }
 
         if (targetBook.quantity < quantity) {
-            System.out.println("0");
+            System.out.println("The quantity is not enough! Please borrow up to this amount " + targetBook.quantity);
+            return;
         }
 
         // =======================================================================================
@@ -199,11 +207,13 @@ class Library {
         }
 
         if (targetBook == null) {
-            System.out.println("0");
+            System.out.println("The title or author is incorrect");
+            return;
         }
 
         if (targetBook.quantity <= 0) {
-            System.out.println("0");
+            System.out.println("The quantity can't be zero or less!");
+            return;
         }
 
         // =======================================================================================
@@ -217,8 +227,9 @@ class Library {
             }
         }
 
-        if (loggedBook.quantity > targetBook.quantity) {
-            System.out.println("0");
+        if (loggedBook.quantity < targetBook.quantity) {
+            System.out.println("The books returned are more than the ones borrowed");
+            return;
         }
 
         // logic
