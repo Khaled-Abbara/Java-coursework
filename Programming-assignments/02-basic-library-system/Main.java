@@ -1,11 +1,14 @@
 import java.util.Scanner;
 
 public class Main {
+    static Scanner scanner = new Scanner(System.in);
+    static String title;
+    static String author;
+    static int quantity;
+
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
 
         Library libraryLog = new Library(100);
-
         Library library = new Library(100);
 
         library.addBook("The Hobbit", "J.R.R. Tolkien", 2);
@@ -21,12 +24,10 @@ public class Main {
 
 
         int choice;
-        String title;
-        String author;
-        int quantity;
 
         do {
-            System.out.println("\n\n======| Library Menu |======");
+            System.out.println("\n\n");
+            System.out.println("======| Library Menu |======");
             System.out.println("1. View all books");
             System.out.println("2. Borrow a book");
             System.out.println("3. Add a book");
@@ -44,54 +45,45 @@ public class Main {
 
                 // borrow books
                 case 2:
-                    System.out.println("Enter the book's title: ");
-                    title = scanner.nextLine();
-                    System.out.println("Enter the book's author: ");
-                    author = scanner.nextLine();
-                    System.out.println("Enter the quantity: ");
-                    quantity = scanner.nextInt();
+                    getBookDetails();
 
                     // logic
                     library.borrowBook(title, quantity);
                     libraryLog.addBook(title, author, quantity);
 
                     // clear variables
-                    title = "";
-                    author = "";
-                    quantity = 0;
+                    clearVariables();
                     break;
 
                 // add books
                 case 3:
-                    System.out.println("Enter the book's title: ");
-                    title = scanner.nextLine();
-                    System.out.println("Enter the book's author: ");
-                    author = scanner.nextLine();
-                    System.out.println("Enter the quantity: ");
-                    quantity = scanner.nextInt();
+                    getBookDetails();
+
+                    // logic
                     library.addBook(title, author, quantity);
 
                     // clear variables
-                    title = "";
-                    author = "";
-                    quantity = 0;
+                    clearVariables();
                     break;
 
                 // Return a book
                 case 4:
-                    System.out.println("Enter the book's title: ");
-                    title = scanner.nextLine();
-                    System.out.println("Enter the book's author: ");
-                    author = scanner.nextLine();
-                    System.out.println("Enter the quantity: ");
+                    getBookDetails();
 
-                    quantity = scanner.nextInt();
+                    // logic
+                    if (libraryLog.doesExist(title, author, quantity)) {
 
-                    library.returnBook(title, quantity);
+                        library.returnBook(title, quantity);
+                        libraryLog.returnBook(title, quantity);
+                        System.out.println("Book Sucessfully returned!");
+
+                    } else {
+                        System.out.println("Incorrect book details, or Book does not belong to the library!");
+                        
+                    }
 
                     // clear variables
-                    title = "";
-                    quantity = 0;
+                    clearVariables();
                     break;
 
                 default:
@@ -103,6 +95,21 @@ public class Main {
         System.out.println("See you again!");
         scanner.close();
     }
+
+    static void getBookDetails() {
+        System.out.println("Enter the book's title: ");
+        title = scanner.nextLine();
+        System.out.println("Enter the book's author: ");
+        author = scanner.nextLine();
+        System.out.println("Enter the quantity: ");
+        quantity = scanner.nextInt();
+    }
+
+    static void clearVariables() {
+        title = "";
+        author = "";
+        quantity = 0;
+    }
 }
 
 class Library {
@@ -112,14 +119,7 @@ class Library {
         books = new Book[capacity];
     }
 
-    public void viewAllBooks() {
-        for (Book book : books) {
-            if (book != null) {
-                System.out.println(book.toString());
-            }
-        }
-    }
-
+    // specifed methods
     public void addBook(String title, String author, int quantity) {
         for (int i = 0; i < books.length; i++) {
             if (books[i] == null) {
@@ -158,6 +158,25 @@ class Library {
             }
         }
         System.out.println("The book title does not exist!");
+    }
+
+    // utility methods
+    public boolean doesExist(String title, String author, int quantity) {
+        for (Book book : books) {
+            if (book.title.equals(title) && book.author.equals(author) && book.quantity == quantity) {
+                return true;
+
+            }
+        }
+        return false;
+    }
+
+    public void viewAllBooks() {
+        for (Book book : books) {
+            if (book != null) {
+                System.out.println(book.toString());
+            }
+        }
     }
 }
 
