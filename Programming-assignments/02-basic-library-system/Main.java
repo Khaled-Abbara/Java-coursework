@@ -38,11 +38,11 @@ public class Main {
             scanner.nextLine(); // consume newline
 
             switch (choice) {
-                case 1: // view books
+                case 1: // View all books
                     library.viewAllBooks();
                     break;
 
-                case 2: // add books
+                case 2: // Add books
                     getBookDetails();
 
                     library.addBook(title, author, quantity);
@@ -59,8 +59,7 @@ public class Main {
                     clearVariables();
                     break;
 
-                // Return a book
-                case 4:
+                case 4: // Return a book
                     getBookDetails();
 
                     library.returnBook(title, author, quantity);
@@ -68,8 +67,7 @@ public class Main {
                     clearVariables();
                     break;
 
-
-                case 5:
+                case 5: // View all logs
                     library.viewAllLogs();
                     break;
 
@@ -86,8 +84,10 @@ public class Main {
     static void getBookDetails() {
         System.out.println("Enter the book's title: ");
         title = scanner.nextLine();
+
         System.out.println("Enter the book's author: ");
         author = scanner.nextLine();
+        
         System.out.println("Enter the quantity: ");
         quantity = scanner.nextInt();
     }
@@ -111,54 +111,36 @@ class Library {
 
     // specifed methods
     public void addBook(String title, String author, int quantity) {
-        
-        // We are adding both in the logs and the books
-
-        // Step 1: check if book already exists
+        // 1. Check if book already exists
         for (int i = 0; i < books.length; i++) {
             if (books[i] != null &&
                 books[i].title.equalsIgnoreCase(title) &&
                 books[i].author.equalsIgnoreCase(author)) {
+    
                 books[i].increaseQuantity(quantity);
-                return; // done
+                records[i].increaseQuantity(quantity); // keep logs updated
+                return;
             }
         }
-
-        // Step 2: find first empty slot
+    
+        // 2. If it's new, add to the first empty slot in both arrays
         for (int i = 0; i < books.length; i++) {
             if (books[i] == null) {
                 books[i] = new Book(title, author, quantity);
-                return; // done
-            }
-        }
-
-        System.out.println("Library is full. Cannot add more books.");
-
-        // Step 1: check if book already exists
-        for (int i = 0; i < records.length; i++) {
-            if (records[i] != null &&
-                records[i].title.equalsIgnoreCase(title) &&
-                records[i].author.equalsIgnoreCase(author)) {
-                records[i].increaseQuantity(quantity);
-                return; // done
-            }
-        }
-
-        // Step 2: find first empty slot
-        for (int i = 0; i < records.length; i++) {
-            if (records[i] == null) {
                 records[i] = new Book(title, author, quantity);
-                return; // done
+                return;
             }
         }
+    
+        System.out.println("Library is full. Cannot add more books.");
     }
-
+    
     public void borrowBook(String title, String author, int quantity) {
 
         Book targetBook = null;
 
         for (Book book : books) {
-            if (book.title.equalsIgnoreCase(title) && book.author.equalsIgnoreCase(author)) {
+            if (book != null && book.title.equalsIgnoreCase(title) && book.author.equalsIgnoreCase(author)) {
                 targetBook = book;
                 break;
             }
@@ -184,7 +166,7 @@ class Library {
         Book loggedBook = null;
 
         for (Book book : records) {
-            if (book.title.equalsIgnoreCase(title) && book.author.equalsIgnoreCase(author)) {
+            if (book != null && book.title.equalsIgnoreCase(title) && book.author.equalsIgnoreCase(author)) {
                 loggedBook = book;
                 break;
             }
@@ -205,7 +187,7 @@ class Library {
         Book targetBook = null;
 
         for (Book book : books) {
-            if (book.title.equalsIgnoreCase(title) && book.author.equalsIgnoreCase(author)) {
+            if (book != null && book.title.equalsIgnoreCase(title) && book.author.equalsIgnoreCase(author)) {
                 targetBook = book;
                 break;
             }
@@ -226,7 +208,7 @@ class Library {
         Book loggedBook = null;
 
         for (Book book : records) {
-            if (book.title.equalsIgnoreCase(title) && book.author.equalsIgnoreCase(author)) {
+            if (book != null && book.title.equalsIgnoreCase(title) && book.author.equalsIgnoreCase(author)) {
                 loggedBook = book;
                 break;
             }
