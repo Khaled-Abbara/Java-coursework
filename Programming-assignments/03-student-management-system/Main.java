@@ -1,6 +1,33 @@
 public class Main {
-    public static void main(String[] args) {
+    public static void Main(String[] args) {
+        System.out.println("Hello World!");
+    }
 
+    static Student addStudent(int id, String name, int age, int grade) {
+        return new Student(id, name, age, grade);
+    }
+
+    static void viewStudent(Student student) {
+        System.out.println(student.getId());
+        System.out.println(student.getName());
+        System.out.println(student.getAge());
+        System.out.println(student.getGrade());
+    }
+
+    static void updateStudent(Student student, String variable, String newValue) {
+        if (variable.equalsIgnoreCase("name")) {
+            student.setName(newValue);
+        }
+
+        if (variable.equalsIgnoreCase("age")) {
+            student.setAge(Integer.parseInt(newValue));
+        }
+
+        if (variable.equalsIgnoreCase("grade")) {
+            student.setGrade(Integer.parseInt(newValue));
+        }
+
+        System.out.println(0);
     }
 }
 
@@ -49,17 +76,6 @@ class Student {
         this.grade = grade;
     }
 
-}
-
-static Student addStudent(int id, String name, int age, int grade) {
-    return new Student(id, name, age, grade);
-}
-
-static void viewStudent(Student student) {
-    System.out.println(student.getId());
-    System.out.println(student.getName());
-    System.out.println(student.getAge());
-    System.out.println(student.getGrade());
 }
 
 class StudentSystem {
