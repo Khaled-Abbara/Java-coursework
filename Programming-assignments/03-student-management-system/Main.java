@@ -1,6 +1,12 @@
+import java.util.Scanner;
+
 public class Main {
-    public static void Main(String[] args) {
-        System.out.println("Hello World!");
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        Dashboard dashboard = new Dashboard(scanner);
+
+        dashboard.run();
+
     }
 
     static Student addStudent(int id, String name, int age, int grade) {
@@ -28,6 +34,30 @@ public class Main {
         }
 
         System.out.println(0);
+    }
+}
+
+class Dashboard {
+    Scanner scanner;
+    int choice;
+
+    public Dashboard(Scanner scanner) {
+        this.scanner = scanner;
+    }
+
+    public void run() {
+        do {
+            System.out.println("\n\n");
+            System.out.println("======| Student Record MS |======");
+            System.out.println("1. View all students");
+            System.out.println("2. Add a new student");
+            System.out.println("3. Change student details");
+            System.out.println("4. Find a student");
+            System.out.println("6. Exit");
+            System.out.print("Enter your choice: ");
+            choice = scanner.nextInt();
+            scanner.nextLine(); // consume newline after integer input
+        } while (choice != 6);
     }
 }
 
@@ -87,8 +117,18 @@ class StudentSystem {
 
     public void viewAllStudents() {
         for (Student student : students) {
-            System.out.println("");
+            // viewStudent(student);
         }
     }
 
+    public boolean findStudentById(int id) {
+        for (Student student : students) {
+            int t = student.getId();
+            if (t == id) {
+                return true;
+            }
+
+        }
+        return false;
+    }
 }
