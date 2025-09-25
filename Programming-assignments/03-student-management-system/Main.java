@@ -39,6 +39,7 @@ class Dashboard {
         this.scanner = scanner;
     }
 
+    // run
     public void launch() {
         int choice;
         do {
