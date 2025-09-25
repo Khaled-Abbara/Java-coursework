@@ -100,40 +100,52 @@
  *
  */
 
+// Import Scanner class for user input
 import java.util.Scanner;
 
+// Main class to start the program
 public class Main {
     public static void main(String[] args) {
 
+        // Create Scanner for user input
         Scanner scanner = new Scanner(System.in);
+
+        // Initialize StudentSystem with capacity of 100 students
         StudentSystem studentSystem = new StudentSystem(100);
+
+        // Create Dashboard to interact with the system
         Dashboard dashboard = new Dashboard(studentSystem, scanner);
 
-        // Sample data:
+        // Add sample student data
         studentSystem.addStudent("Alice Johnson", 6, 1);
         studentSystem.addStudent("Khaled Abbara", 11, 6);
         studentSystem.addStudent("Karel van zijil", 12, 4);
         studentSystem.addStudent("Dana Banana", 8, 2);
         studentSystem.addStudent("Safa Saber", 12, 7);
 
+        // Start the dashboard (menu system)
         dashboard.launch();
     }
 }
 
+// Handles the menu and user interactions
 class Dashboard {
 
     final StudentSystem studentSystem;
     final Scanner scanner;
 
+    // Constructor to initialize dashboard with system and scanner
     public Dashboard(StudentSystem studentSystem, Scanner scanner) {
         this.studentSystem = studentSystem;
         this.scanner = scanner;
     }
 
+    // Launches the menu loop
     public void launch() {
         int choice;
 
         do {
+            // Display menu options
             System.out.println("\n========| Student Record MS |========\n");
             System.out.println("-------------------------------------");
             System.out.println("1. View all student records");
@@ -147,54 +159,46 @@ class Dashboard {
             System.out.println("7. Exit");
             System.out.println("-------------------------------------");
 
+            // Take user input
             System.out.print("Enter your choice: ");
-
             choice = scanner.nextInt();
-            scanner.nextLine();
+            scanner.nextLine(); // consume newline
 
+            // Handle menu options
             switch (choice) {
-                // =======================================
                 case 1 -> handleViewAllStudents();
                 case 2 -> handleCountStudents();
                 case 3 -> handleViewLastId();
-
-                // =======================================
                 case 4 -> handleAddStudent();
                 case 5 -> handleUpdateStudent();
                 case 6 -> handleFindStudent();
-
-                // =======================================
                 case 7 -> System.out.println("Exiting... Goodbye!");
-
-                // =======================================
                 default -> System.err.println("Invalid choice. Please try again.");
-
             }
         } while (choice != 7);
-
     }
 
+    // Show all students
     public void handleViewAllStudents() {
         System.out.println("\n\n");
         System.out.println("-----");
         studentSystem.viewAllStudents();
-
     }
 
+    // Show total number of students
     public void handleCountStudents() {
-
         System.out.println("\n");
         System.out.println("Number of Students in the system: " + StudentSystem.totalStudents);
     }
 
+    // Show last student ID assigned
     public void handleViewLastId() {
-
         System.out.println("\n");
         System.out.println("The last student Id: " + Student.getLastId());
     }
 
+    // Add a new student to the system
     public void handleAddStudent() {
-
         System.out.print("Enter student name: ");
         String name = scanner.nextLine();
 
@@ -209,8 +213,8 @@ class Dashboard {
         System.out.println("Student added successfully!");
     }
 
+    // Update an existing student's details
     public void handleUpdateStudent() {
-
         System.out.print("Enter student ID to update: ");
         int id = scanner.nextInt();
         scanner.nextLine();
@@ -229,8 +233,8 @@ class Dashboard {
         StudentSystem.updateStudent(student, field, newValue);
     }
 
+    // Find and display a student by ID
     public void handleFindStudent() {
-
         System.out.print("Enter student ID to search: ");
         int id = scanner.nextInt();
         scanner.nextLine();
@@ -246,18 +250,18 @@ class Dashboard {
             System.out.println("-----");
         }
     }
-
 }
 
+// Represents a single student record
 class Student {
 
-    static int idCounter = 0;
-
-    final int id;
+    static int idCounter = 0; // Tracks student IDs
+    final int id; // Unique student ID
     String name;
     int age;
     int grade;
 
+    // Constructor to create a new student
     public Student(String name, int age, int grade) {
         this.id = ++idCounter;
         this.name = name;
@@ -265,10 +269,12 @@ class Student {
         this.grade = grade;
     }
 
+    // Return last assigned student ID
     static int getLastId() {
         return idCounter;
     }
 
+    // Getters
     public int getId() {
         return id;
     }
@@ -285,6 +291,7 @@ class Student {
         return grade;
     }
 
+    // Setters
     public void setName(String name) {
         this.name = name;
     }
@@ -298,18 +305,19 @@ class Student {
     }
 }
 
+// Manages the student records system
 class StudentSystem {
 
-    static int totalStudents = 0;
-    static Student[] students;
+    static int totalStudents = 0; // Total number of students
+    static Student[] students; // Array to store students
 
+    // Constructor initializes system with given capacity
     public StudentSystem(int capacity) {
-
         students = new Student[capacity];
     }
 
+    // Add a new student
     public void addStudent(String name, int age, int grade) {
-
         if (totalStudents >= students.length) {
             System.out.println("Error: Student list is full.");
             return;
@@ -317,21 +325,20 @@ class StudentSystem {
         students[totalStudents++] = new Student(name, age, grade);
     }
 
+    // View all students
     public void viewAllStudents() {
-
         if (totalStudents == 0) {
             System.out.println("No students found.");
             return;
         }
-
         for (int i = 0; i < totalStudents; i++) {
             viewStudent(students[i]);
             System.out.println("-----");
         }
     }
 
+    // Find student by ID
     public Student findStudentById(int id) {
-
         for (int i = 0; i < totalStudents; i++) {
             if (students[i].getId() == id) {
                 return students[i];
@@ -340,32 +347,29 @@ class StudentSystem {
         return null;
     }
 
+    // Print details of a student
     public static void viewStudent(Student student) {
-
         System.out.println("ID: " + student.getId());
         System.out.println("Name: " + student.getName());
         System.out.println("Age: " + student.getAge());
         System.out.println("Grade: " + student.getGrade());
     }
 
+    // Update student details
     public static void updateStudent(Student student, String variable, String newValue) {
-
         switch (variable.toLowerCase()) {
             case "name" -> {
                 student.setName(newValue);
                 System.out.println("Student's name updated!");
             }
-
             case "age" -> {
                 student.setAge(Integer.parseInt(newValue));
                 System.out.println("Student's age updated!");
             }
-
             case "grade" -> {
                 student.setGrade(Integer.parseInt(newValue));
                 System.out.println("Student's grade updated!");
             }
-
             default -> System.out.println("Error: Invalid field.");
         }
     }
