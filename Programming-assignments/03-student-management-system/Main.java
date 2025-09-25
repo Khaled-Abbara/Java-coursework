@@ -1,21 +1,104 @@
-// Student Data Storage:
-//
-// Use individual variables to store student information such as name, ID, age, and grade.
-//
-// Student Management:
-//
-// Develop a set of logically separated methods/functions within a dedicated classless structure,
-// employing static variables for storing the total number of students and the student list.
-//
-// Administrator Interface:
-//
-// Display a menu with options to add a new student, update student information, and view student details.
-//
-// Prompt the administrator for necessary inputs and perform the requested operations using the StudentManagement logic.
-//
-// Error Handling:
-//
-// Implement error handling to manage cases where the student ID is not found or invalid inputs are provided.
+/*
+ * ==============================================
+ *   Student Record Management System (Console)
+ * ==============================================
+ *
+ * This program is a simple console-based Student Record
+ * Management System written in Java. It allows users to:
+ *
+ *  1. View all student records
+ *  2. View total number of students
+ *  3. View the last assigned student ID
+ *  4. Add a new student
+ *  5. Update student details (name, age, grade)
+ *  6. Find a student by their ID
+ *  7. Exit the program
+ *
+ * -------------------------
+ *  STRUCTURE OF THE PROGRAM
+ * -------------------------
+ *
+ *  - Main:
+ *      Entry point of the application.
+ *      Initializes the StudentSystem and Dashboard,
+ *      adds some sample students, and launches the dashboard menu.
+ *
+ *  - Dashboard:
+ *      Handles user interaction via a text-based menu.
+ *      Uses a Scanner to read input and invokes
+ *      corresponding methods from StudentSystem.
+ *
+ *  - Student:
+ *      Represents a student with attributes:
+ *      ID, Name, Age, and Grade.
+ *      IDs are auto-incremented using a static counter (idCounter).
+ *
+ *  - StudentSystem:
+ *      Core management system that stores students in
+ *      an array (with a fixed capacity set at initialization).
+ *      Provides methods to add, view, find, and update students.
+ *
+ * -------------------------
+ *  USE OF STATIC
+ * -------------------------
+ *
+ *  - In Student:
+ *      A static counter (idCounter) is used to auto-generate
+ *      unique IDs for each student. A static method (getLastId)
+ *      allows retrieving the last assigned ID.
+ *
+ *  - In StudentSystem:
+ *      The array of students (students[]) and the student count
+ *      (totalStudents) are static, meaning they are shared across
+ *      all instances of StudentSystem.
+ *      Some utility methods (viewStudent, updateStudent) are also
+ *      defined as static since they operate directly on
+ *      provided Student objects rather than instance data.
+ *
+ * -------------------------
+ *  HOW IT WORKS
+ * -------------------------
+ *
+ *  - The program starts with the main menu in Dashboard.
+ *  - Users select an option by entering a number (1–7).
+ *  - Student data is stored in an array within StudentSystem.
+ *  - Students can be added, viewed, updated, or searched by ID.
+ *  - The program continues looping until the user selects Exit (option 7).
+ *
+ * -------------------------
+ *  LIMITATIONS
+ * -------------------------
+ *
+ *  - Students are stored in a fixed-size array.
+ *    (No dynamic resizing or database integration.)
+ *  - Designed for demonstration/learning purposes only.
+ *
+ * -------------------------
+ *  GOOD DESIGN CHOICES
+ * -------------------------
+ *
+ *  - Separation of Concerns:
+ *      Different classes handle different responsibilities:
+ *      Main (entry point), Dashboard (UI), StudentSystem (logic),
+ *      and Student (data model).
+ *
+ *  - Encapsulation:
+ *      Student properties are private with getter/setter methods
+ *      to control access and updates.
+ *
+ *  - Auto-incremented IDs:
+ *      Using a static counter in Student ensures each student
+ *      has a unique ID without manual tracking.
+ *
+ *  - Menu-Driven Flow:
+ *      The dashboard provides a clear, user-friendly interface
+ *      for navigating the system in a loop until exit.
+ *
+ *  - Reusable Utility Methods:
+ *      Static methods in StudentSystem (viewStudent, updateStudent)
+ *      make common operations reusable and concise.
+ *
+ */
 
 import java.util.Scanner;
 
@@ -29,13 +112,8 @@ public class Main {
         // Sample data:
         studentSystem.addStudent("Alice Johnson", 6, 1);
         studentSystem.addStudent("Khaled Abbara", 11, 6);
-        studentSystem.addStudent("Yuki Tanaka", 9, 3);
         studentSystem.addStudent("Karel van zijil", 12, 4);
-        studentSystem.addStudent("Amina Yusuf", 7, 1);
         studentSystem.addStudent("Dana Banana", 8, 2);
-        studentSystem.addStudent("Emily Wei", 9, 3);
-        studentSystem.addStudent("Sofia sadd", 10, 4);
-        studentSystem.addStudent("Omar El-Sayed", 9, 3);
         studentSystem.addStudent("Safa Saber", 12, 7);
 
         dashboard.launch();
@@ -56,33 +134,63 @@ class Dashboard {
         int choice;
 
         do {
-            System.out.println("\n======| Student Record MS |======");
-            System.out.println("1. View all students");
-            System.out.println("2. Add a new student");
-            System.out.println("3. Change student details");
-            System.out.println("4. Find a student");
-            System.out.println("5. Exit");
+            System.out.println("\n========| Student Record MS |========\n");
+            System.out.println("-------------------------------------");
+            System.out.println("1. View all student records");
+            System.out.println("2. View total number of students");
+            System.out.println("3. View last ID");
+            System.out.println("-------------------------------------");
+            System.out.println("4. Add a new student");
+            System.out.println("5. Change student details");
+            System.out.println("6. Find a student by ID");
+            System.out.println("-------------------------------------");
+            System.out.println("7. Exit");
+            System.out.println("-------------------------------------");
+
             System.out.print("Enter your choice: ");
 
             choice = scanner.nextInt();
             scanner.nextLine();
 
             switch (choice) {
+                // =======================================
                 case 1 -> handleViewAllStudents();
-                case 2 -> handleAddStudent();
-                case 3 -> handleUpdateStudent();
-                case 4 -> handleFindStudent();
-                case 5 -> System.out.println("Exiting... Goodbye!");
+                case 2 -> handleCountStudents();
+                case 3 -> handleViewLastId();
 
+                // =======================================
+                case 4 -> handleAddStudent();
+                case 5 -> handleUpdateStudent();
+                case 6 -> handleFindStudent();
+
+                // =======================================
+                case 7 -> System.out.println("Exiting... Goodbye!");
+
+                // =======================================
                 default -> System.err.println("Invalid choice. Please try again.");
+
             }
-        } while (choice != 5);
+        } while (choice != 7);
 
     }
 
     public void handleViewAllStudents() {
-
+        System.out.println("\n\n");
+        System.out.println("-----");
         studentSystem.viewAllStudents();
+
+    }
+
+    public void handleCountStudents() {
+
+        System.out.println("\n");
+        System.out.println("Number of Students in the system: " + StudentSystem.totalStudents);
+    }
+
+    public void handleViewLastId() {
+
+        System.out.println("\n");
+        System.out.println("The last student Id: " + Student.getLastId());
     }
 
     public void handleAddStudent() {
@@ -132,9 +240,13 @@ class Dashboard {
         if (student == null) {
             System.out.println("Error: Student with ID " + id + " not found.");
         } else {
+            System.out.println("\n");
+            System.out.println("-----");
             StudentSystem.viewStudent(student);
+            System.out.println("-----");
         }
     }
+
 }
 
 class Student {
@@ -153,12 +265,12 @@ class Student {
         this.grade = grade;
     }
 
-    public int getId() {
-        return id;
+    static int getLastId() {
+        return idCounter;
     }
 
-    public int getLastId() {
-        return idCounter;
+    public int getId() {
+        return id;
     }
 
     public String getName() {
