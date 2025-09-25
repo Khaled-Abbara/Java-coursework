@@ -31,6 +31,7 @@ public class Main {
 }
 
 class Dashboard {
+
     final StudentSystem studentSystem;
     final Scanner scanner;
 
@@ -123,6 +124,7 @@ class Dashboard {
 }
 
 class Student {
+
     static int idCounter = 0;
 
     final int id;
@@ -171,14 +173,17 @@ class Student {
 }
 
 class StudentSystem {
+
     static int totalStudents = 0;
     static Student[] students;
 
     public StudentSystem(int capacity) {
+
         students = new Student[capacity];
     }
 
     public void addStudent(String name, int age, int grade) {
+
         if (totalStudents >= students.length) {
             System.out.println("Error: Student list is full.");
             return;
@@ -187,10 +192,12 @@ class StudentSystem {
     }
 
     public void viewAllStudents() {
+
         if (totalStudents == 0) {
             System.out.println("No students found.");
             return;
         }
+
         for (int i = 0; i < totalStudents; i++) {
             viewStudent(students[i]);
             System.out.println("-----");
@@ -198,6 +205,7 @@ class StudentSystem {
     }
 
     public Student findStudentById(int id) {
+
         for (int i = 0; i < totalStudents; i++) {
             if (students[i].getId() == id) {
                 return students[i];
@@ -207,6 +215,7 @@ class StudentSystem {
     }
 
     public static void viewStudent(Student student) {
+
         System.out.println("ID: " + student.getId());
         System.out.println("Name: " + student.getName());
         System.out.println("Age: " + student.getAge());
@@ -214,27 +223,23 @@ class StudentSystem {
     }
 
     public static void updateStudent(Student student, String variable, String newValue) {
+
         switch (variable.toLowerCase()) {
             case "name" -> {
                 student.setName(newValue);
                 System.out.println("Student's name updated!");
             }
+
             case "age" -> {
-                try {
-                    student.setAge(Integer.parseInt(newValue));
-                    System.out.println("Student's age updated!");
-                } catch (NumberFormatException e) {
-                    System.out.println("Error: Age must be a number.");
-                }
+                student.setAge(Integer.parseInt(newValue));
+                System.out.println("Student's age updated!");
             }
+
             case "grade" -> {
-                try {
-                    student.setGrade(Integer.parseInt(newValue));
-                    System.out.println("Student's grade updated!");
-                } catch (NumberFormatException e) {
-                    System.out.println("Error: Grade must be a number.");
-                }
+                student.setGrade(Integer.parseInt(newValue));
+                System.out.println("Student's grade updated!");
             }
+
             default -> System.out.println("Error: Invalid field.");
         }
     }
