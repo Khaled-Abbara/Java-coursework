@@ -31,8 +31,8 @@ public class Main {
 }
 
 class Dashboard {
-    private final StudentSystem studentSystem;
-    private final Scanner scanner;
+    final StudentSystem studentSystem;
+    final Scanner scanner;
 
     public Dashboard(StudentSystem studentSystem, Scanner scanner) {
         this.studentSystem = studentSystem;
@@ -41,6 +41,7 @@ class Dashboard {
 
     public void launch() {
         int choice;
+
         do {
             System.out.println("\n======| Student Record MS |======");
             System.out.println("1. View all students");
@@ -50,12 +51,8 @@ class Dashboard {
             System.out.println("5. Exit");
             System.out.print("Enter your choice: ");
 
-            while (!scanner.hasNextInt()) { // input validation
-                System.out.println("Invalid input! Please enter a number.");
-                scanner.next();
-            }
             choice = scanner.nextInt();
-            scanner.nextLine(); // consume newline
+            scanner.nextLine();
 
             switch (choice) {
                 case 1 -> handleViewAllStudents();
@@ -63,16 +60,20 @@ class Dashboard {
                 case 3 -> handleUpdateStudent();
                 case 4 -> handleFindStudent();
                 case 5 -> System.out.println("Exiting... Goodbye!");
-                default -> System.out.println("Invalid choice. Please try again.");
+
+                default -> System.err.println("Invalid choice. Please try again.");
             }
         } while (choice != 5);
+
     }
 
-    private void handleViewAllStudents() {
+    public void handleViewAllStudents() {
+
         studentSystem.viewAllStudents();
     }
 
-    private void handleAddStudent() {
+    public void handleAddStudent() {
+
         System.out.print("Enter student name: ");
         String name = scanner.nextLine();
 
@@ -87,7 +88,7 @@ class Dashboard {
         System.out.println("Student added successfully!");
     }
 
-    private void handleUpdateStudent() {
+    public void handleUpdateStudent() {
         System.out.print("Enter student ID to update: ");
         int id = scanner.nextInt();
         scanner.nextLine();
@@ -106,12 +107,13 @@ class Dashboard {
         StudentSystem.updateStudent(student, field, newValue);
     }
 
-    private void handleFindStudent() {
+    public void handleFindStudent() {
         System.out.print("Enter student ID to search: ");
         int id = scanner.nextInt();
         scanner.nextLine();
 
         Student student = studentSystem.findStudentById(id);
+
         if (student == null) {
             System.out.println("Error: Student with ID " + id + " not found.");
         } else {
@@ -121,12 +123,12 @@ class Dashboard {
 }
 
 class Student {
-    private static int idCounter = 0;
+    static int idCounter = 0;
 
-    private final int id;
-    private String name;
-    private int age;
-    private int grade;
+    final int id;
+    String name;
+    int age;
+    int grade;
 
     public Student(String name, int age, int grade) {
         this.id = ++idCounter;
@@ -137,6 +139,10 @@ class Student {
 
     public int getId() {
         return id;
+    }
+
+    public int getLastId() {
+        return idCounter;
     }
 
     public String getName() {
@@ -165,8 +171,8 @@ class Student {
 }
 
 class StudentSystem {
-    private static int totalStudents = 0;
-    private static Student[] students;
+    static int totalStudents = 0;
+    static Student[] students;
 
     public StudentSystem(int capacity) {
         students = new Student[capacity];
