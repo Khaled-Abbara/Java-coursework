@@ -26,6 +26,18 @@ public class Main {
         StudentSystem studentSystem = new StudentSystem(100);
         Dashboard dashboard = new Dashboard(studentSystem, scanner);
 
+        // Sample data:
+        studentSystem.addStudent("Alice Johnson", 6, 1);
+        studentSystem.addStudent("Khaled Abbara", 11, 6);
+        studentSystem.addStudent("Yuki Tanaka", 9, 3);
+        studentSystem.addStudent("Karel van zijil", 12, 4);
+        studentSystem.addStudent("Amina Yusuf", 7, 1);
+        studentSystem.addStudent("Dana Banana", 8, 2);
+        studentSystem.addStudent("Emily Wei", 9, 3);
+        studentSystem.addStudent("Sofia sadd", 10, 4);
+        studentSystem.addStudent("Omar El-Sayed", 9, 3);
+        studentSystem.addStudent("Safa Saber", 12, 7);
+
         dashboard.launch();
     }
 }
@@ -90,6 +102,7 @@ class Dashboard {
     }
 
     public void handleUpdateStudent() {
+
         System.out.print("Enter student ID to update: ");
         int id = scanner.nextInt();
         scanner.nextLine();
@@ -109,6 +122,7 @@ class Dashboard {
     }
 
     public void handleFindStudent() {
+
         System.out.print("Enter student ID to search: ");
         int id = scanner.nextInt();
         scanner.nextLine();
