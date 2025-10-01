@@ -23,4 +23,16 @@ public class Main {
 
         return maxPrice;
     }
+
+    public static int countOccurrences (int targetPrice, double[] prices) {
+        int counter = 0;
+
+        for (int index = 0; index < prices.length; index++) {
+            if (targetPrice == prices[index]) {
+                counter++;
+            }
+        }
+
+        return counter;
+    }
 }
