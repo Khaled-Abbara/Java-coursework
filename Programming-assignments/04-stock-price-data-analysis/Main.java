@@ -12,5 +12,15 @@ public class Main {
         return (total / prices.length);
     }  
     
-    
+    public static double findMaximumPrice (double[] prices) {
+        double maxPrice = prices[0];
+
+        for (int index = 1; index < prices.length; index++) {
+            if (maxPrice < prices[index]) {
+                maxPrice = prices[index];
+            }
+        }
+
+        return maxPrice;
+    }
 }
