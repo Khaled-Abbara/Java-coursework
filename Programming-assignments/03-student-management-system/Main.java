@@ -117,7 +117,6 @@ public class Main {
         Dashboard dashboard = new Dashboard(studentSystem, scanner);
 
         // Add sample student data
-        studentSystem.addStudent("Alice Johnson", 6, 1);
         studentSystem.addStudent("Khaled Abbara", 11, 6);
         studentSystem.addStudent("Karel van zijil", 12, 4);
         studentSystem.addStudent("Dana Banana", 8, 2);
@@ -199,18 +198,27 @@ class Dashboard {
 
     // Add a new student to the system
     public void handleAddStudent() {
-        System.out.print("Enter student name: ");
-        String name = scanner.nextLine();
+        try {
+            System.out.print("Enter student name: ");
+            String name = scanner.nextLine();
 
-        System.out.print("Enter age: ");
-        int age = scanner.nextInt();
+            System.out.print("Enter age: ");
+            int age = scanner.nextInt();
 
-        System.out.print("Enter grade: ");
-        int grade = scanner.nextInt();
-        scanner.nextLine(); // consume newline
+            System.out.print("Enter grade: ");
+            int grade = scanner.nextInt();
+            scanner.nextLine(); // consume newline
 
-        studentSystem.addStudent(name, age, grade);
-        System.out.println("Student added successfully!");
+            studentSystem.addStudent(name, age, grade);
+            System.out.println("Student added successfully!");
+
+        } catch (Exception e) {
+
+            System.out.println("Error: Invalid input. Please try again.");
+            scanner.nextLine(); // clear the invalid input
+            handleAddStudent(); // retry
+        }
+
     }
 
     // Update an existing student's details
@@ -225,12 +233,16 @@ class Dashboard {
             return;
         }
 
-        System.out.print("Enter field to update (name/age/grade): ");
-        String field = scanner.nextLine();
-        System.out.print("Enter new value: ");
-        String newValue = scanner.nextLine();
+        try {
+            System.out.print("Enter field to update (name/age/grade): ");
+            String field = scanner.nextLine();
+            System.out.print("Enter new value: ");
+            String newValue = scanner.nextLine();
 
-        StudentSystem.updateStudent(student, field, newValue);
+            StudentSystem.updateStudent(student, field, newValue);
+        } catch (Exception e) {
+            System.out.println("Error: Invalid input. Please try again.");
+        }
     }
 
     // Find and display a student by ID
