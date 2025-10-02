@@ -106,21 +106,30 @@ public class Main {
         System.out.println("Daily Stock Changes: " + dailyChange(stockPrices));
     }
 
-    // Calculate average price of stocks
+    /**
+     * Calculates the average stock price from an array of prices.
+     * Loops through all values, sums them, then divides by array length.
+     */
     public static double calculateAveragePrice(double[] prices) {
         double total = 0;
 
+        // Add all prices together
         for (int index = 0; index < prices.length; index++) {
             total += prices[index];
         }
 
+        // Divide by number of prices to get average
         return (total / prices.length);
     }
 
-    // Find the highest stock price
+    /**
+     * Finds the maximum (highest) stock price.
+     * Starts with the first price, then compares with all others.
+     */
     public static double findMaximumPrice(double[] prices) {
-        double maxPrice = prices[0];
+        double maxPrice = prices[0]; // assume first price is max
 
+        // Check each price and update maxPrice if a larger one is found
         for (int index = 1; index < prices.length; index++) {
             if (maxPrice < prices[index]) {
                 maxPrice = prices[index];
@@ -130,42 +139,53 @@ public class Main {
         return maxPrice;
     }
 
-    // Count how many times a given price occurs
+    /**
+     * Counts how many times a given stock price appears in the array.
+     * Useful for checking repeated values.
+     */
     public static int countOccurrences(double targetPrice, double[] prices) {
         int counter = 0;
 
+        // Compare each price with the target price
         for (int index = 0; index < prices.length; index++) {
             if (targetPrice == prices[index]) {
-                counter++;
+                counter++; // increment if match found
             }
         }
 
         return counter;
     }
 
-    // Compute running total of stock prices
+    /**
+     * Computes the cumulative (running) sum of stock prices.
+     * Example: [100, 200, 300] → [100, 300, 600]
+     */
     public static ArrayList<Double> computeCumulativeSum(double[] prices) {
 
-        double currentValue = 0;
+        double currentValue = 0; // running total
         ArrayList<Double> cumulativePrices = new ArrayList<Double>();
 
         for (int index = 0; index < prices.length; index++) {
-            // add current price to running total
+            // Add current price to running total
             currentValue += prices[index];
 
-            // store cumulative sum
+            // Store the cumulative sum at this step
             cumulativePrices.add(currentValue);
         }
 
         return cumulativePrices;
     }
 
-    // Bonus Methods
+    // ================== Bonus Methods ==================
 
-    // Find the lowest stock price
+    /**
+     * Finds the minimum (lowest) stock price.
+     * Similar to max but checks for the smallest value instead.
+     */
     public static double findmMinimumPrice(double[] prices) {
-        double minPrice = prices[0];
+        double minPrice = prices[0]; // assume first price is min
 
+        // Check each price and update minPrice if a smaller one is found
         for (int index = 1; index < prices.length; index++) {
             if (minPrice > prices[index]) {
                 minPrice = prices[index];
@@ -175,19 +195,24 @@ public class Main {
         return minPrice;
     }
 
-    // Calculate daily changes in stock prices
+    /**
+     * Computes daily stock price changes.
+     * Each value is the difference between the next day and the current day.
+     * Example: [100, 102, 101] → [2, -1]
+     */
     public static ArrayList<Double> dailyChange(double[] prices) {
         ArrayList<Double> changes = new ArrayList<Double>();
         double change;
 
+        // Loop until second-to-last day (since we compare day+1)
         for (int index = 0; index < prices.length - 1; index++) {
-            // difference between consecutive days
+            // Difference between consecutive days
             change = prices[index + 1] - prices[index];
 
-            // round to 2 decimals
+            // Round to 2 decimal places
             change = Math.round(change * 100.0) / 100.0;
 
-            // push the change in the ArrayList
+            // Store the daily change
             changes.add(change);
         }
 
