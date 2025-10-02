@@ -95,13 +95,14 @@ public class Main {
         }
 
         // Call and print results of different stock price analysis methods
+        System.out.println("\n===============( Main Methods )================");
         System.out.println("Average Price: " + calculateAveragePrice(stockPrices));
         System.out.println("Maximum Price: " + findMaximumPrice(stockPrices));
         System.out.println("Occurrences of 102.5: " + countOccurrences(102.5, stockPrices));
         System.out.println("Cumulative Prices: " + computeCumulativeSum(stockPrices));
 
         // Extra "bonus" methods
-        System.out.println("\n(Bonus)=======================================");
+        System.out.println("\n===================( Bonus )===================");
         System.out.println("Minimum Price: " + findmMinimumPrice(stockPrices));
         System.out.println("Daily Stock Changes: " + dailyChange(stockPrices));
     }
