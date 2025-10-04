@@ -5,7 +5,9 @@ public class Main {
 
 enum Message {
     SUCCESS,
-    INDEX_OUT_OF_BOUNDS;
+    INDEX_OUT_OF_BOUNDS,
+    ARRAY_IS_FULL,
+    COURSE_ALREADY_EXISTS;
 }
 
 class Student {
@@ -70,6 +72,42 @@ class Course {
 }
 
 class CourseManagement {
-    private static 
+    private static Course[] courses = new Course[5];
+
+    // helper method
+    static int findEmptyCourseIndex() {
+        int targetIndex;
+
+        for (int index = 0; index < courses.length; index++) {
+            if (courses[index] == null) {
+                targetIndex = index;
+                return targetIndex;
+            }
+        }
+
+        return -1;
+    }
+
+    static boolean courseExists(String name) {
+        for (Course course : courses) {
+            if (course.getName() == name) {
+                 return true; 
+            }
+        }
+        return false;
+    }
+
+    static Message addCourse(int code, String name, int capacity) {
+        if (courseExists(name)) return Message.COURSE_ALREADY_EXISTS;
+
+        int index = findEmptyCourseIndex();
+
+        if (index == -1) return Message.ARRAY_IS_FULL;
+
+        courses[index] = new Course(code, name, capacity);
+
+        return Message.SUCCESS;
+
+    }
 
 }
