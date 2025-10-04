@@ -48,12 +48,12 @@ class Student {
 class Course {
     private int code;
     private String name;
-    private int capacity;
+    private Student[] students;
 
     public Course(int code, String name, int capacity) {
         this.code = code;
         this.name = name;
-        this.capacity = capacity;
+        this.students = new Student[capacity];
     }
 
     public int getCode() {
@@ -65,11 +65,11 @@ class Course {
     }
 
     public int getCapacity() {
-        return capacity;
+        return students.length;
     }
 }
 
 class CourseManagement {
-    
-    
+    private static 
+
 }
