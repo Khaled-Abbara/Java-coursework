@@ -50,12 +50,12 @@ class Student {
 class Course {
     private int code;
     private String name;
-    private Student[] students;
+    private Student[] enrolledStudents;
 
     public Course(int code, String name, int capacity) {
         this.code = code;
         this.name = name;
-        this.students = new Student[capacity];
+        this.enrolledStudents = new Student[capacity];
     }
 
     public int getCode() {
@@ -67,14 +67,36 @@ class Course {
     }
 
     public int getCapacity() {
-        return students.length;
+        return enrolledStudents.length;
     }
 }
 
 class CourseManagement {
+    private static Student[] students = new Student[500];
     private static Course[] courses = new Course[5];
 
-    // helper method
+    static Message addCourse(int code, String name, int capacity) {
+        if (courseExists(code)) return Message.COURSE_ALREADY_EXISTS;
+
+        int index = findEmptyCourseIndex();
+
+        if (index == -1) return Message.ARRAY_IS_FULL;
+
+        courses[index] = new Course(code, name, capacity);
+
+        return Message.SUCCESS;
+
+    }
+
+    static Message enrollStudent(int studentId, int courseCode) {
+        
+
+
+        return Message.SUCCESS;
+    }
+
+
+    // =====================|Helper Methods|=====================
     static int findEmptyCourseIndex() {
         int targetIndex;
 
@@ -88,26 +110,23 @@ class CourseManagement {
         return -1;
     }
 
-    static boolean courseExists(String name) {
+    static boolean courseExists(int code) {
         for (Course course : courses) {
-            if (course.getName() == name) {
+            if (course.getCode() == code) {
                  return true; 
             }
         }
+
         return false;
     }
 
-    static Message addCourse(int code, String name, int capacity) {
-        if (courseExists(name)) return Message.COURSE_ALREADY_EXISTS;
-
-        int index = findEmptyCourseIndex();
-
-        if (index == -1) return Message.ARRAY_IS_FULL;
-
-        courses[index] = new Course(code, name, capacity);
-
-        return Message.SUCCESS;
-
+    static boolean StudentExists(int id) {
+        for (Student student : students) {
+            if (student.getId() == id) {
+                return true;
+            }
+        }
+        
+        return false;
     }
-
 }
