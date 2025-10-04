@@ -11,7 +11,7 @@ enum Message {
 class Student {
     private int id;
     private String name;
-    private String[] enrolledCourses = new String[4];
+    private int[] enrolledCourses = new int[4];
 
     public Student(int id, String name) {
         this.id = id;
@@ -29,7 +29,7 @@ class Student {
         return name;
     }
 
-    public String[] getEnrolledCourses() {
+    public int[] getEnrolledCourses() {
         return enrolledCourses;
     }
 
@@ -37,10 +37,10 @@ class Student {
         this.name = name;
     }
 
-    public Message setCourse(int index, String courseName) {
+    public Message setCourse(int index, int courseCode) {
         if (index < 0 || index > 4) return Message.INDEX_OUT_OF_BOUNDS;
     
-        enrolledCourses[index] = courseName;
+        enrolledCourses[index] = courseCode;
         return Message.SUCCESS;
     }
 }
