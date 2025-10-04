@@ -1,13 +1,15 @@
-public class Main {
-    
-}
+import java.lang.classfile.instruction.SwitchCase;
 
+public class Main {
+
+}
 
 enum Message {
     SUCCESS,
     INDEX_OUT_OF_BOUNDS,
     ARRAY_IS_FULL,
-    COURSE_ALREADY_EXISTS;
+    COURSE_ALREADY_EXISTS,
+    INCORRECT_ID;
 }
 
 class Student {
@@ -18,9 +20,9 @@ class Student {
     public Student(int id, String name) {
         this.id = id;
         this.name = name;
-        
+
     }
-    
+
     // getters and setters
 
     public int getId() {
@@ -40,8 +42,9 @@ class Student {
     }
 
     public Message setCourse(int index, int courseCode) {
-        if (index < 0 || index > 4) return Message.INDEX_OUT_OF_BOUNDS;
-    
+        if (index < 0 || index > 4)
+            return Message.INDEX_OUT_OF_BOUNDS;
+
         enrolledCourses[index] = courseCode;
         return Message.SUCCESS;
     }
@@ -61,7 +64,7 @@ class Course {
     public int getCode() {
         return code;
     }
-    
+
     public String getName() {
         return name;
     }
@@ -76,11 +79,13 @@ class CourseManagement {
     private static Course[] courses = new Course[5];
 
     static Message addCourse(int code, String name, int capacity) {
-        if (courseExists(code)) return Message.COURSE_ALREADY_EXISTS;
+        if (courseExists(code))
+            return Message.COURSE_ALREADY_EXISTS;
 
         int index = findEmptyCourseIndex();
 
-        if (index == -1) return Message.ARRAY_IS_FULL;
+        if (index == -1)
+            return Message.ARRAY_IS_FULL;
 
         courses[index] = new Course(code, name, capacity);
 
@@ -89,12 +94,13 @@ class CourseManagement {
     }
 
     static Message enrollStudent(int studentId, int courseCode) {
-        
+        if (!StudentExists(studentId))
+            return Message.INCORRECT_ID;
 
+        Student targetStudent = findStudent("id", String.valueOf(studentId));
 
         return Message.SUCCESS;
     }
-
 
     // =====================|Helper Methods|=====================
     static int findEmptyCourseIndex() {
@@ -110,10 +116,31 @@ class CourseManagement {
         return -1;
     }
 
+    static Student findStudentById(int id) {
+
+        for (Student student : students) {
+            if (student.getId() == id) {
+                return student;
+            }
+        }
+        return null;
+    }
+
+    static Student findStudentByName(String name) {
+        for (Student student : students) {
+            if (student.getName() == name) {
+                return student;
+            }
+        }
+
+        return null;
+
+    }
+
     static boolean courseExists(int code) {
         for (Course course : courses) {
             if (course.getCode() == code) {
-                 return true; 
+                return true;
             }
         }
 
@@ -126,7 +153,7 @@ class CourseManagement {
                 return true;
             }
         }
-        
+
         return false;
     }
 }
