@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -21,13 +22,45 @@ public class Main {
 
 // =====================| ENUM |=====================
 enum Message {
-    SUCCESS,
-    INDEX_OUT_OF_BOUNDS,
-    ARRAY_IS_FULL,
-    COURSE_ALREADY_EXISTS,
-    INCORRECT_COURSE_CODE,
-    INCORRECT_STUDENT_ID,
-    INCORRECT_STUDENT_NAME
+    // ---------- SUCCESS MESSAGES ----------
+    SUCCESS_GENERAL("Operation completed successfully."),
+    SUCCESS_COURSE_ADDED("Course added successfully."),
+    SUCCESS_STUDENT_ADDED("Student added successfully."),
+    SUCCESS_ENROLLMENT("Student enrolled in course successfully."),
+    SUCCESS_GRADE_ASSIGNED("Grade assigned successfully."),
+    SUCCESS_CALCULATION_DONE("Overall grade calculated successfully."),
+
+    // ---------- ERROR MESSAGES ----------
+    ERROR_INDEX_OUT_OF_BOUNDS("Index is out of bounds. Please check your input."),
+    ERROR_ARRAY_FULL("The array is full. Cannot add more entries."),
+    ERROR_COURSE_EXISTS("A course with this code already exists."),
+    ERROR_COURSE_CODE_INVALID("Invalid course code. Please try again."),
+    ERROR_STUDENT_ID_INVALID("Invalid student ID. Please try again."),
+    ERROR_STUDENT_NAME_INVALID("Invalid or empty student name."),
+    ERROR_STUDENT_NOT_FOUND("Student not found in the system."),
+    ERROR_COURSE_NOT_FOUND("Course not found in the system."),
+    ERROR_ENROLLMENT_EXISTS("Student is already enrolled in this course."),
+    ERROR_UNKNOWN("An unknown error occurred. Please contact the administrator."),
+
+    // ---------- INFO MESSAGES ----------
+    INFO_NO_ENROLLMENTS("No enrollments found."),
+    INFO_NO_STUDENTS("No students found in the system."),
+    INFO_NO_COURSES("No courses available.");
+
+    private final String message;
+
+    Message(String message) {
+        this.message = message;
+    }
+
+    public void print() {
+        System.out.println(message);
+    }
+
+    @Override
+    public String toString() {
+        return message;
+    }
 }
 
 // =====================| STUDENT CLASS |=====================
@@ -43,7 +76,6 @@ class Student {
         this.name = name;
     }
 
-    // Getters and Setters
     public int getId() {
         return id;
     }
@@ -56,7 +88,6 @@ class Student {
         this.name = name;
     }
 
-    // Instance Methods
     public void enrollCourse(Course course) {
         if (!enrolledCourses.contains(course)) {
             enrolledCourses.add(course);
@@ -158,55 +189,62 @@ class CourseManagement {
     private static Course[] courses = new Course[5];
     private static ArrayList<Enrollment> enrollments = new ArrayList<>();
 
-    // Add new student
-    static void addStudent(String name) {
-        int index = Main.findEmptyIndex(students);
-        if (index != -1) {
-            students[index] = new Student(name);
-        } else {
-            System.out.println("Student array is full.");
-        }
-    }
-
     // Add new course
     static Message addCourse(String code, String name, int capacity) {
         if (courseExists(code))
-            return Message.COURSE_ALREADY_EXISTS;
+            return Message.ERROR_COURSE_EXISTS;
 
         int index = Main.findEmptyIndex(courses);
         if (index == -1)
-            return Message.ARRAY_IS_FULL;
+            return Message.ERROR_ARRAY_FULL;
 
         courses[index] = new Course(code, name, capacity);
-        return Message.SUCCESS;
+        return Message.SUCCESS_COURSE_ADDED;
+    }
+
+    // Add new student
+    static Message addStudent(String name) {
+        int index = Main.findEmptyIndex(students);
+
+        if (index != -1) {
+            students[index] = new Student(name);
+            return Message.SUCCESS_STUDENT_ADDED;
+        } else {
+            return Message.ERROR_ARRAY_FULL;
+        }
     }
 
     // Enroll student
     static Message enrollStudent(int studentId, String courseCode) {
         if (!studentExists(studentId))
-            return Message.INCORRECT_STUDENT_ID;
+            return Message.ERROR_STUDENT_ID_INVALID;
 
         if (!courseExists(courseCode))
-            return Message.INCORRECT_COURSE_CODE;
+            return Message.ERROR_COURSE_CODE_INVALID;
 
         Student targetStudent = findStudentById(studentId);
         Course targetCourse = findCourseByCode(courseCode);
 
+        if (targetStudent.getEnrolledCourses().contains(targetCourse))
+            return Message.ERROR_ENROLLMENT_EXISTS;
+
         targetStudent.enrollCourse(targetCourse);
         enrollments.add(new Enrollment(targetCourse, targetStudent));
         Course.incrementTotalEnrolledStudents();
-        return Message.SUCCESS;
+        return Message.SUCCESS_ENROLLMENT;
     }
 
     // Assign grade
-    static void assignGrade(int studentId, String courseCode, int grade) {
+    static Message assignGrade(int studentId, String courseCode, int grade) {
         for (Enrollment enrollment : enrollments) {
             if (enrollment.getStudent().getId() == studentId &&
                     enrollment.getCourse().getCode().equals(courseCode)) {
                 enrollment.setGrade(grade);
                 enrollment.getStudent().assignGrade(enrollment.getCourse(), grade);
+                return Message.SUCCESS_GRADE_ASSIGNED;
             }
         }
+        return Message.ERROR_ENROLLMENT_EXISTS;
     }
 
     // Calculate overall grade
@@ -219,29 +257,43 @@ class CourseManagement {
     static void viewAllStudents() {
         System.out.println("Student Id, Name");
         System.out.println("_________________________________________________________");
+        boolean found = false;
         for (Student student : students) {
-            if (student != null)
+            if (student != null) {
+                found = true;
                 System.out.println(student.getId() + " , " + student.getName());
+            }
         }
+        if (!found)
+            Message.INFO_NO_STUDENTS.print();
         System.out.println("_________________________________________________________");
     }
 
     static void viewAllCourses() {
         System.out.println("Course Code, Name, Capacity");
         System.out.println("_________________________________________________________");
+        boolean found = false;
         for (Course course : courses) {
-            if (course != null)
+            if (course != null) {
+                found = true;
                 System.out.println(course.getCode() + " , " + course.getName() + " , " + course.getCapacity());
+            }
         }
+        if (!found)
+            Message.INFO_NO_COURSES.print();
         System.out.println("_________________________________________________________");
     }
 
     static void viewAllEnrollments() {
         System.out.println("Course Code, Student Id, Grade");
         System.out.println("_________________________________________________________");
-        for (Enrollment enrollment : enrollments) {
-            System.out.println(enrollment.getCourse().getCode() + " , " + enrollment.getStudent().getId()
-                    + " , " + enrollment.getGrade());
+        if (enrollments.isEmpty()) {
+            Message.INFO_NO_ENROLLMENTS.print();
+        } else {
+            for (Enrollment enrollment : enrollments) {
+                System.out.println(enrollment.getCourse().getCode() + " , " + enrollment.getStudent().getId()
+                        + " , " + enrollment.getGrade());
+            }
         }
         System.out.println("_________________________________________________________");
     }
@@ -314,9 +366,9 @@ class AdministratorInterface {
                 case 3 -> handleEnrollStudent();
                 case 4 -> handleAssignGrade();
                 case 5 -> handleCalculateOverallGrade();
-                case 6 -> handleViewAllStudents();
-                case 7 -> handleViewAllCourses();
-                case 8 -> handleViewAllEnrollments();
+                case 6 -> CourseManagement.viewAllStudents();
+                case 7 -> CourseManagement.viewAllCourses();
+                case 8 -> CourseManagement.viewAllEnrollments();
                 case 9 -> System.out.println("Exiting system... Goodbye!");
                 default -> System.out.println("Invalid choice. Please try again.");
             }
@@ -324,6 +376,7 @@ class AdministratorInterface {
     }
 
     private void handleAddCourse() {
+
         System.out.print("Enter Course Code: ");
         String code = scanner.nextLine();
         System.out.print("Enter Course Name: ");
@@ -333,18 +386,20 @@ class AdministratorInterface {
         scanner.nextLine();
 
         Message result = CourseManagement.addCourse(code, name, capacity);
-        System.out.println("Result: " + result);
+        System.out.println(result);
     }
 
     private void handleAddStudent() {
+
         System.out.print("Enter Student Name: ");
         String name = scanner.nextLine();
 
-        CourseManagement.addStudent(name);
-        System.out.println("Student added successfully.");
+        Message result = CourseManagement.addStudent(name);
+        System.out.println(result);
     }
 
     private void handleEnrollStudent() {
+
         System.out.print("Enter Student ID: ");
         int studentId = scanner.nextInt();
         scanner.nextLine();
@@ -352,7 +407,7 @@ class AdministratorInterface {
         String courseCode = scanner.nextLine();
 
         Message result = CourseManagement.enrollStudent(studentId, courseCode);
-        System.out.println("Result: " + result);
+        System.out.println(result);
     }
 
     private void handleAssignGrade() {
@@ -365,8 +420,8 @@ class AdministratorInterface {
         int grade = scanner.nextInt();
         scanner.nextLine();
 
-        CourseManagement.assignGrade(studentId, courseCode, grade);
-        System.out.println("Grade assigned successfully.");
+        Message result = CourseManagement.assignGrade(studentId, courseCode, grade);
+        System.out.println(result);
     }
 
     private void handleCalculateOverallGrade() {
@@ -376,17 +431,5 @@ class AdministratorInterface {
 
         int totalGrade = CourseManagement.calculateOverallGrade(studentId);
         System.out.println("Overall grade for student " + studentId + " is: " + totalGrade);
-    }
-
-    private void handleViewAllStudents() {
-        CourseManagement.viewAllStudents();
-    }
-
-    private void handleViewAllCourses() {
-        CourseManagement.viewAllCourses();
-    }
-
-    private void handleViewAllEnrollments() {
-        CourseManagement.viewAllEnrollments();
     }
 }
