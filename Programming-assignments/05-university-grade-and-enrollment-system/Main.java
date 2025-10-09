@@ -453,8 +453,8 @@ class CourseManagement {
 
     // View Methods
     static void viewAllStudents() {
-        System.out.println("Student Id, Name");
-        System.out.println("_________________________________________________________");
+        System.out.println("\nStudent Id, Name");
+        System.out.println("-------------------------------------------------");
         boolean found = false;
         for (Student student : students) {
             if (student != null) {
@@ -464,12 +464,12 @@ class CourseManagement {
         }
         if (!found)
             Message.INFO_NO_STUDENTS.print();
-        System.out.println("_________________________________________________________");
+        System.out.println("-------------------------------------------------");
     }
 
     static void viewAllCourses() {
-        System.out.println("Course Code, Name, Capacity");
-        System.out.println("_________________________________________________________");
+        System.out.println("\nCourse Code, Name, Capacity");
+        System.out.println("-------------------------------------------------");
         boolean found = false;
         for (Course course : courses) {
             if (course != null) {
@@ -479,12 +479,12 @@ class CourseManagement {
         }
         if (!found)
             Message.INFO_NO_COURSES.print();
-        System.out.println("_________________________________________________________");
+        System.out.println("-------------------------------------------------");
     }
 
     static void viewAllEnrollments() {
-        System.out.println("Course Code + Student Id, Name, Grade");
-        System.out.println("_________________________________________________________");
+        System.out.println("\nCourse Code + Student Id, Name, Grade");
+        System.out.println("-------------------------------------------------");
         if (enrollments.isEmpty()) {
             Message.INFO_NO_ENROLLMENTS.print();
         } else {
@@ -493,7 +493,7 @@ class CourseManagement {
                         + " , " + enrollment.getGrade());
             }
         }
-        System.out.println("_________________________________________________________");
+        System.out.println("-------------------------------------------------");
     }
 
     // Helper methods
