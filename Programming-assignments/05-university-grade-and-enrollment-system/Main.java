@@ -1,4 +1,198 @@
 
+/**
+ * ============================================================
+ *  University Enrollment and Grading System
+ * ------------------------------------------------------------
+ *  Description:
+ *  This program simulates a simple university enrollment and grading system.
+ *  It allows administrators to:
+ *      - Add new students and courses
+ *      - Enroll students into courses
+ *      - Assign grades
+ *      - Calculate overall grades
+ *      - View student, course, and enrollment information
+ * 
+ * 
+ * ============================================================
+ *  PROGRAM STRUCTURE OVERVIEW
+ * ------------------------------------------------------------
+ *  The program is organized into several modular classes,
+ *  each responsible for a specific part of the university
+ *  enrollment and grading system.
+ * 
+ *  1. Main Class:
+ *      - Entry point of the program.
+ *      - Initializes the AdministratorInterface and starts the CLI.
+ *      - Contains a generic helper method findEmptyIndex() for arrays.
+ * 
+ *  2. Message Enum:
+ *      - Defines consistent feedback messages (SUCCESS, ERROR, INFO).
+ *      - Used throughout the system for readable and maintainable output.
+ * 
+ *  3. Student Class:
+ *      - Represents a student entity with ID, name, enrolled courses, and grades.
+ *      - Uses encapsulation to protect student data.
+ *      - Provides methods for enrolling in courses, assigning grades,
+ *        and calculating overall grade performance.
+ * 
+ *  4. Course Class:
+ *      - Represents a university course with a code, name, and capacity.
+ *      - Tracks the total number of enrolled students via a static variable.
+ * 
+ *  5. Enrollment Class:
+ *      - Represents the link between a Student and a Course.
+ *      - Stores the assigned grade for that specific pairing.
+ *      - Used to implement the **many-to-many relationship** between Students and Courses:
+ *          → A Student can enroll in many Courses.
+ *          → A Course can have many Students.
+ *      - Each Enrollment instance uniquely associates one Student with one Course.
+ * 
+ *  6. CourseManagement Class:
+ *      - Acts as the main system controller or "backend service".
+ *      - Manages arrays of Students and Courses, and an ArrayList of Enrollments.
+ *      - Provides static methods for adding, enrolling, grading, and viewing data.
+ * 
+ *  7. AdministratorInterface Class:
+ *      - Provides a command-line interface (CLI) for administrators.
+ *      - Handles input/output and delegates operations to CourseManagement.
+ * 
+ *  ------------------------------------------------------------
+ *  Flow of Execution:
+ *     Main → AdministratorInterface → CourseManagement → (Student / Course / Enrollment)
+ * 
+ * 
+ * ============================================================
+ *  DESIGN CHOICES
+ * ------------------------------------------------------------
+ *  • Object-Oriented Structure:
+ *      - The system is fully object-oriented, separating logic by responsibility.
+ *      - Each class mirrors a real-world concept (Student, Course, Enrollment).
+ * 
+ *  • Encapsulation:
+ *      - All key variables are private with controlled access through getters/setters.
+ *      - Prevents unauthorized direct modification of student or course data.
+ * 
+ *  • Many-to-Many Relationship Representation:
+ *      - The Enrollment class serves as an intermediary entity that models
+ *        the many-to-many relationship between Students and Courses.
+ *      - This approach ensures scalable management of enrollments and grades
+ *        without duplicating course or student data.
+ * 
+ *  • Static vs Instance Methods:
+ *      - CourseManagement methods are static because they perform system-wide operations
+ *        and do not depend on individual object state.
+ *      - Student and Course use instance methods to maintain individual object behavior.
+ * 
+ *  • Use of Enum (Message):
+ *      - The Message enum centralizes system messages for easier maintenance.
+ *      - Improves readability and prevents hardcoding repeated text.
+ * 
+ *  • Data Structures:
+ *      - Arrays used for Students and Courses to simulate fixed capacity.
+ *      - ArrayList used for Enrollments for dynamic, scalable storage.
+ * 
+ *  • Error Handling and Feedback:
+ *      - Methods return Message enums instead of raw strings or codes.
+ *      - Provides consistent, user-friendly feedback throughout the system.
+ * 
+ *  • CLI Design:
+ *      - Simple, menu-based administrator interface using Scanner for input.
+ *      - Each option maps clearly to a specific system operation.
+ * 
+ *  • Grade Management:
+ *      - Each Student keeps a parallel ArrayList of grades matching enrolled courses.
+ *      - The Enrollment class also stores grades, ensuring consistent tracking.
+ * 
+ * 
+ * ============================================================
+ *  CRITERIA SATISFACTION
+ * ------------------------------------------------------------
+ * 
+ *  1. Encapsulation:
+ *      - Used in the Student, Course, and Enrollment classes.
+ *      - All key variables are private to protect data and maintain control.
+ * 
+ *  2. Getters and Setters:
+ *      - Added in the Student class to access and modify private data safely.
+ *      - Example methods: getName(), setName(), getId().
+ * 
+ *  3. Instance Methods:
+ *      - The Student class includes methods that update an object’s state:
+ *        enrollCourse(), assignGrade(), and calculateOverallGrade().
+ * 
+ *  4. Student Data Management:
+ *      - Student information (name, ID, enrolledCourses, and grades) is stored
+ *        using private variables to ensure encapsulation.
+ * 
+ *  5. Course Enrollment:
+ *      - The enrollCourse() method adds a course to a student’s list while
+ *        checking for duplicates to prevent re-enrollment.
+ * 
+ *  6. Grade Assignment:
+ *      - The assignGrade() method updates a student’s grade for a specific course.
+ * 
+ *  7. Course Data Encapsulation:
+ *      - Course class stores details like code, name, and capacity in private fields.
+ *      - Accessed through getter methods such as getCode(), getName(), and getCapacity().
+ * 
+ *  8. Static Tracking:
+ *      - Course class includes a static variable to count total enrolled students.
+ *      - Updated using incrementTotalEnrolledStudents().
+ * 
+ *  9. Centralized System Management:
+ *      - CourseManagement class holds static arrays/lists for students, courses,
+ *        and enrollments to manage all records in one place.
+ * 
+ * 10. Static Operations:
+ *      - Major system functions (addCourse, addStudent, enrollStudent, assignGrade,
+ *        calculateOverallGrade) are implemented as static methods in CourseManagement.
+ * 
+ * 11. Input Handling:
+ *      - AdministratorInterface class handles all user input and validation,
+ *        then passes data to CourseManagement for processing.
+ * 
+ * 12. Command-Line Interface:
+ *      - The menu-driven interface in AdministratorInterface provides easy navigation
+ *        for adding students, courses, enrollments, and viewing reports.
+ * 
+ * 13. Class Interaction:
+ *      - The system follows a clear flow:
+ *        AdministratorInterface → CourseManagement → Student/Course/Enrollment classes.
+ * 
+ * 
+ * ============================================================
+ *  LEARNING OUTCOMES AND REFLECTION
+ *  ------------------------------------------------------------
+ * 
+ *  • I learned how to use enums in Java to organize and manage constant values
+ *    like success, error, and info messages in a clean and maintainable way.
+ *    The `Message` enum provides structured feedback across the system.
+ * 
+ *  • I learned how to **design complex object-oriented classes** that work together.
+ *    For example, the Student class interacts with Course and Enrollment objects,
+ *    demonstrating relationships between real-world entities.
+ * 
+ *  • I learned how to use Java Generics (`<T>`) to write reusable methods that
+ *    can work with multiple data types, such as in `Main.findEmptyIndex(T[] array)`.
+ * 
+ *  • I learned how to use ArrayLists more effectively for storing dynamic data
+ *    such as enrolled courses and student grades. I now understand how to use
+ *    ArrayList methods like add(), contains(), indexOf(), and set() to manage lists.
+ * 
+ * 
+ * ============================================================
+ *  Conclusion:
+ *  ------------------------------------------------------------
+ *  This project demonstrates strong understanding of:
+ *      - Encapsulation and data protection
+ *      - Getter and setter implementation
+ *      - Static and instance method design
+ *      - Use of enums, generics, and ArrayLists
+ *      - Class relationships and interactive CLI design
+ * 
+ * 
+**/
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
