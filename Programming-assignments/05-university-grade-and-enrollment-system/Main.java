@@ -372,6 +372,10 @@ class Enrollment {
         return grade;
     }
 
+    public String getCompositeId() {
+        return compositeId;
+    }
+
     public void setGrade(int grade) {
         this.grade = grade;
     }
@@ -479,13 +483,13 @@ class CourseManagement {
     }
 
     static void viewAllEnrollments() {
-        System.out.println("Course Code, Student Id, Grade");
+        System.out.println("Course Code + Student Id, Name, Grade");
         System.out.println("_________________________________________________________");
         if (enrollments.isEmpty()) {
             Message.INFO_NO_ENROLLMENTS.print();
         } else {
             for (Enrollment enrollment : enrollments) {
-                System.out.println(enrollment.getCourse().getCode() + " , " + enrollment.getStudent().getId()
+                System.out.println(enrollment.getCompositeId() + " , " + enrollment.getStudent().getName()
                         + " , " + enrollment.getGrade());
             }
         }
