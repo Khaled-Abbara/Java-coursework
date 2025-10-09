@@ -3,7 +3,6 @@ import java.util.Scanner;
 
 public class Main {
     Scanner scanner = new Scanner(System.in);
-
     AdministratorInterface AdminInterface = new AdministratorInterface(scanner);
 
     static <T> int findEmptyIndex(T[] array) {
@@ -121,7 +120,7 @@ class CourseManagement {
     }
 
     static Message enrollStudent(int studentId, String courseCode) {
-        if (!StudentExists(studentId))
+        if (!studentExists(studentId))
             return Message.INCORRECT_COURSE_CODE;
 
         if (!courseExists(courseCode))
@@ -157,6 +156,33 @@ class CourseManagement {
         return totalGrades;
     }
 
+    static void viewAllStudents() {
+        System.out.println("_________________________________________________________");
+
+        for (Student student : students) {
+            System.out.println(" | " + student.getId() + " | " + student.getName() + " | ");
+            System.out.println("_________________________________________________________");
+        }
+    }
+
+    public void viewAllCourses() {
+        System.out.println("_________________________________________________________");
+        for (Course course : courses) {
+            System.out.println(
+                    " | " + course.getCode() + " | " + course.getName() + " | " + course.getCapacity() + " | ");
+            System.out.println("_________________________________________________________");
+
+        }
+    }
+
+    public void viewAllEnrollments() {
+        System.out.println("_________________________________________________________");
+        for (Enrollment enrollment : enrollments) {
+            System.out.println(" | " + enrollment.course.getCode() + " | " + enrollment.student.getId() + " | "
+                    + enrollment.course.getName() + " | ");
+            System.out.println("_________________________________________________________");
+        }
+    }
     // =====================|Helper Methods|=====================
 
     static Course findCourseByCode(String code) {
@@ -200,7 +226,7 @@ class CourseManagement {
         return false;
     }
 
-    static boolean StudentExists(int id) {
+    static boolean studentExists(int id) {
         for (Student student : students) {
             if (student.getId() == id) {
                 return true;
@@ -228,7 +254,12 @@ class AdministratorInterface {
             System.out.println("3. Enroll Student to Course");
             System.out.println("4. Assign Grade");
             System.out.println("5. Calculate Overall Grade");
-            System.out.println("6. Exit");
+            System.out.println("---------------------------------");
+            System.out.println("6. View Student list");
+            System.out.println("7. View Course list");
+            System.out.println("8. View Enrollment list");
+            System.out.println("---------------------------------");
+            System.out.println("9. Exit");
             System.out.print("Enter your choice: ");
 
             choice = scanner.nextInt();
@@ -240,14 +271,18 @@ class AdministratorInterface {
                 case 3 -> enrollStudent();
                 case 4 -> assignGrade();
                 case 5 -> calculateOverallGrade();
-                case 6 -> System.out.println("Exiting system... Goodbye!");
+                case 6 -> viewAllStudents();
+                case 7 -> calculateOverallGrade();
+                case 8 -> calculateOverallGrade();
+                case 9 -> System.out.println("Exiting system... Goodbye!");
                 default -> System.out.println("Invalid choice. Please try again.");
             }
 
-        } while (choice != 6);
+        } while (choice != 9);
     }
 
-    private void addCourse() {
+    public void addCourse() {
+        // Capture input
         System.out.print("Enter Course Code: ");
         String code = scanner.nextLine();
         System.out.print("Enter Course Name: ");
@@ -256,29 +291,36 @@ class AdministratorInterface {
         int capacity = scanner.nextInt();
         scanner.nextLine();
 
+        // Excute logic
         Message result = CourseManagement.addCourse(code, name, capacity);
         System.out.println("Result: " + result);
     }
 
-    private void addStudent() {
+    public void addStudent() {
+        // Capture input
         System.out.print("Enter Student Name: ");
         String name = scanner.nextLine();
+
+        // Excute logic
         CourseManagement.addStudent(name);
         System.out.println("Student added successfully.");
     }
 
-    private void enrollStudent() {
+    public void enrollStudent() {
+        // Capture input
         System.out.print("Enter Student ID: ");
         int studentId = scanner.nextInt();
         scanner.nextLine();
         System.out.print("Enter Course Code: ");
         String courseCode = scanner.nextLine();
 
+        // Excute logic
         Message result = CourseManagement.enrollStudent(studentId, courseCode);
         System.out.println("Result: " + result);
     }
 
-    private void assignGrade() {
+    public void assignGrade() {
+        // Capture input
         System.out.print("Enter Student ID: ");
         int studentId = scanner.nextInt();
         scanner.nextLine();
@@ -288,16 +330,24 @@ class AdministratorInterface {
         int grade = scanner.nextInt();
         scanner.nextLine();
 
+        // Excute logic
         CourseManagement.assignGrade(studentId, courseCode, grade);
         System.out.println("Grade assigned successfully.");
     }
 
-    private void calculateOverallGrade() {
+    public void calculateOverallGrade() {
+        // Capture input
         System.out.print("Enter Student ID: ");
         int studentId = scanner.nextInt();
         scanner.nextLine();
 
+        // Excute logic
         int totalGrade = CourseManagement.calculateOverallGrade(studentId);
         System.out.println("Overall grade for student " + studentId + " is: " + totalGrade);
     }
+
+    public void viewAllStudents() {
+        CourseManagement.viewAllStudents();
+    }
+
 }
