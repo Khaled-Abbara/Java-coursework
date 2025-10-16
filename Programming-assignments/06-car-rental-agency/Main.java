@@ -262,82 +262,85 @@ class VehicleInformationSystem {
         System.out.println("===== Vehicle Information System =====");
 
         while (!exit) {
-            System.out.println("\nSelect an option:");
-            System.out.println("1. Add Car");
-            System.out.println("2. Add Motorcycle");
-            System.out.println("3. Add Truck");
-            System.out.println("4. View All Vehicles");
-            System.out.println("5. Exit");
-            System.out.print("Enter your choice: ");
+            try {
+                System.out.println("\nSelect an option:");
+                System.out.println("1. Add Car");
+                System.out.println("2. Add Motorcycle");
+                System.out.println("3. Add Truck");
+                System.out.println("4. View All Vehicles");
+                System.out.println("5. Exit");
+                System.out.print("Enter your choice: ");
 
-            int choice = readInt();
+                int choice = readInt();
 
-            switch (choice) {
-                case 1 -> createCar();
-                case 2 -> createMotorcycle();
-                case 3 -> createTruck();
-                case 4 -> viewVehicles();
-                case 5 -> {
-                    System.out.println("Exiting program. Goodbye!");
-                    exit = true;
+                switch (choice) {
+                    case 1 -> createCar();
+                    case 2 -> createMotorcycle();
+                    case 3 -> createTruck();
+                    case 4 -> viewVehicles();
+                    case 5 -> {
+                        System.out.println("Exiting program. Goodbye!");
+                        exit = true;
+                    }
+                    default -> System.out.println("Invalid choice. Please select 1–5.");
                 }
-                default -> System.out.println("Invalid choice. Please select 1–5.");
+
+            } catch (Exception e) {
+                System.out.println("An unexpected error occurred: " + e.getMessage());
+                sc.nextLine(); // clear buffer just in case
             }
         }
     }
 
     private void createCar() {
-        Car car = new Car();
-        System.out.println("\n--- Enter Car Details ---");
-        System.out.print("Make: ");
-        car.setMake(sc.nextLine());
-        System.out.print("Model: ");
-        car.setModel(sc.nextLine());
-        System.out.print("Year: ");
-        car.setYear(readInt());
-        System.out.print("Number of Doors: ");
-        car.setDoorNumber(readInt());
-        System.out.print("Fuel Type: ");
-        car.setFuelType(sc.nextLine());
+        try {
+            Car car = new Car();
+            System.out.println("\n--- Enter Car Details ---");
+            car.setMake(readNonEmpty("Make"));
+            car.setModel(readNonEmpty("Model"));
+            car.setYear(readPositiveInt("Year"));
+            car.setDoorNumber(readPositiveInt("Number of Doors"));
+            car.setFuelType(readNonEmpty("Fuel Type"));
 
-        vehicles.add(car);
-        System.out.println("✅ Car added successfully!");
+            vehicles.add(car);
+            System.out.println("Car added successfully!");
+        } catch (Exception e) {
+            System.out.println("Failed to add car. " + e.getMessage());
+        }
     }
 
     private void createMotorcycle() {
-        Motorcycle m = new Motorcycle();
-        System.out.println("\n--- Enter Motorcycle Details ---");
-        System.out.print("Make: ");
-        m.setMake(sc.nextLine());
-        System.out.print("Model: ");
-        m.setModel(sc.nextLine());
-        System.out.print("Year: ");
-        m.setYear(readInt());
-        System.out.print("Number of Wheels: ");
-        m.setNumberOfWheels(readInt());
-        System.out.print("Type: ");
-        m.setMotorcycleType(sc.nextLine());
+        try {
+            Motorcycle m = new Motorcycle();
+            System.out.println("\n--- Enter Motorcycle Details ---");
+            m.setMake(readNonEmpty("Make"));
+            m.setModel(readNonEmpty("Model"));
+            m.setYear(readPositiveInt("Year"));
+            m.setNumberOfWheels(readPositiveInt("Number of Wheels"));
+            m.setMotorcycleType(readNonEmpty("Type"));
 
-        vehicles.add(m);
-        System.out.println("✅ Motorcycle added successfully!");
+            vehicles.add(m);
+            System.out.println("Motorcycle added successfully!");
+        } catch (Exception e) {
+            System.out.println("Failed to add motorcycle. " + e.getMessage());
+        }
     }
 
     private void createTruck() {
-        Truck t = new Truck();
-        System.out.println("\n--- Enter Truck Details ---");
-        System.out.print("Make: ");
-        t.setMake(sc.nextLine());
-        System.out.print("Model: ");
-        t.setModel(sc.nextLine());
-        System.out.print("Year: ");
-        t.setYear(readInt());
-        System.out.print("Cargo Capacity: ");
-        t.setCargoCapacity(sc.nextLine());
-        System.out.print("Transmission: ");
-        t.setTransmissionType(sc.nextLine());
+        try {
+            Truck t = new Truck();
+            System.out.println("\n--- Enter Truck Details ---");
+            t.setMake(readNonEmpty("Make"));
+            t.setModel(readNonEmpty("Model"));
+            t.setYear(readPositiveInt("Year"));
+            t.setCargoCapacity(readNonEmpty("Cargo Capacity"));
+            t.setTransmissionType(readNonEmpty("Transmission"));
 
-        vehicles.add(t);
-        System.out.println("✅ Truck added successfully!");
+            vehicles.add(t);
+            System.out.println("Truck added successfully!");
+        } catch (Exception e) {
+            System.out.println("Failed to add truck. " + e.getMessage());
+        }
     }
 
     private void viewVehicles() {
@@ -351,14 +354,40 @@ class VehicleInformationSystem {
         }
     }
 
+    // ----- Utility Methods -----
     private int readInt() {
         while (true) {
             try {
-                int value = Integer.parseInt(sc.nextLine());
-                return value;
+                return Integer.parseInt(sc.nextLine());
             } catch (NumberFormatException e) {
                 System.out.print("Please enter a valid number: ");
             }
         }
+    }
+
+    private int readPositiveInt(String label) {
+        int value;
+        while (true) {
+            System.out.print(label + ": ");
+            try {
+                value = Integer.parseInt(sc.nextLine());
+                if (value > 0)
+                    return value;
+                System.out.println("Please enter a positive number.");
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid number, please try again.");
+            }
+        }
+    }
+
+    private String readNonEmpty(String label) {
+        String input;
+        do {
+            System.out.print(label + ": ");
+            input = sc.nextLine().trim();
+            if (input.isEmpty())
+                System.out.println("This field cannot be empty.");
+        } while (input.isEmpty());
+        return input;
     }
 }
