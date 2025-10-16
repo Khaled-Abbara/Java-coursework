@@ -1,20 +1,21 @@
-import java.util.Scanner;
+import java.util.*;
 
+// ====================== Main ======================
 public class Main {
     public static void main(String[] args) {
-
+        VehicleInformationSystem vis = new VehicleInformationSystem();
+        vis.start();
     }
 }
 
+// ====================== Interfaces ======================
 interface Vehicle {
-    // getters
     String getMake();
 
     String getModel();
 
     int getYear();
 
-    // setters
     void setMake(String make);
 
     void setModel(String model);
@@ -23,36 +24,30 @@ interface Vehicle {
 }
 
 interface CarVehicle {
-    // getters
     int getDoorNumber();
 
     String getFuelType();
 
-    // setters
     void setDoorNumber(int doorNumber);
 
     void setFuelType(String fuelType);
 }
 
 interface MotorVehicle {
-    // getters
     int getNumberOfWheels();
 
     String getMotorcycleType();
 
-    // setters
     void setNumberOfWheels(int numberOfWheels);
 
     void setMotorcycleType(String motorcycleType);
 }
 
 interface TruckVehicle {
-    // getters
     String getCargoCapacity();
 
     String getTransmissionType();
 
-    // setters
     void setCargoCapacity(String cargoCapacity);
 
     void setTransmissionType(String transmissionType);
@@ -66,7 +61,6 @@ class Car implements Vehicle, CarVehicle {
     private int doorNumber;
     private String fuelType;
 
-    // getters
     @Override
     public String getMake() {
         return make;
@@ -92,7 +86,6 @@ class Car implements Vehicle, CarVehicle {
         return fuelType;
     }
 
-    // setters
     @Override
     public void setMake(String make) {
         this.make = make;
@@ -117,9 +110,14 @@ class Car implements Vehicle, CarVehicle {
     public void setFuelType(String fuelType) {
         this.fuelType = fuelType;
     }
+
+    @Override
+    public String toString() {
+        return "Car - " + make + " " + model + " (" + year + "), Doors: " + doorNumber + ", Fuel: " + fuelType;
+    }
 }
 
-// ====================== MotorCycle ======================
+// ====================== Motorcycle ======================
 class Motorcycle implements Vehicle, MotorVehicle {
     private String make;
     private String model;
@@ -127,7 +125,6 @@ class Motorcycle implements Vehicle, MotorVehicle {
     private int numberOfWheels;
     private String motorcycleType;
 
-    // getters
     @Override
     public String getMake() {
         return make;
@@ -153,7 +150,6 @@ class Motorcycle implements Vehicle, MotorVehicle {
         return motorcycleType;
     }
 
-    // setters
     @Override
     public void setMake(String make) {
         this.make = make;
@@ -178,6 +174,12 @@ class Motorcycle implements Vehicle, MotorVehicle {
     public void setMotorcycleType(String motorcycleType) {
         this.motorcycleType = motorcycleType;
     }
+
+    @Override
+    public String toString() {
+        return "Motorcycle - " + make + " " + model + " (" + year + "), Wheels: " + numberOfWheels + ", Type: "
+                + motorcycleType;
+    }
 }
 
 // ====================== Truck ======================
@@ -188,7 +190,6 @@ class Truck implements Vehicle, TruckVehicle {
     private String cargoCapacity;
     private String transmissionType;
 
-    // getters
     @Override
     public String getMake() {
         return make;
@@ -214,7 +215,6 @@ class Truck implements Vehicle, TruckVehicle {
         return transmissionType;
     }
 
-    // setters
     @Override
     public void setMake(String make) {
         this.make = make;
@@ -239,13 +239,22 @@ class Truck implements Vehicle, TruckVehicle {
     public void setTransmissionType(String transmissionType) {
         this.transmissionType = transmissionType;
     }
+
+    @Override
+    public String toString() {
+        return "Truck - " + make + " " + model + " (" + year + "), Capacity: " + cargoCapacity + ", Transmission: "
+                + transmissionType;
+    }
 }
 
+// ====================== VehicleInformationSystem ======================
 class VehicleInformationSystem {
     private Scanner sc;
+    private List<Vehicle> vehicles; // store all vehicles
 
     public VehicleInformationSystem() {
         sc = new Scanner(System.in);
+        vehicles = new ArrayList<>();
     }
 
     public void start() {
@@ -253,127 +262,103 @@ class VehicleInformationSystem {
         System.out.println("===== Vehicle Information System =====");
 
         while (!exit) {
-            System.out.println("\nSelect the type of vehicle to create:");
-            System.out.println("1. Car");
-            System.out.println("2. Motorcycle");
-            System.out.println("3. Truck");
-            System.out.println("4. Exit");
+            System.out.println("\nSelect an option:");
+            System.out.println("1. Add Car");
+            System.out.println("2. Add Motorcycle");
+            System.out.println("3. Add Truck");
+            System.out.println("4. View All Vehicles");
+            System.out.println("5. Exit");
             System.out.print("Enter your choice: ");
 
             int choice = readInt();
 
             switch (choice) {
-                case 1:
-                    createCar();
-                    break;
-                case 2:
-                    createMotorcycle();
-                    break;
-                case 3:
-                    createTruck();
-                    break;
-                case 4:
+                case 1 -> createCar();
+                case 2 -> createMotorcycle();
+                case 3 -> createTruck();
+                case 4 -> viewVehicles();
+                case 5 -> {
                     System.out.println("Exiting program. Goodbye!");
                     exit = true;
-                    break;
-                default:
-                    System.out.println("Invalid choice. Please select 1–4.");
+                }
+                default -> System.out.println("Invalid choice. Please select 1–5.");
             }
         }
     }
 
-    // Create a Car object and display details
     private void createCar() {
         Car car = new Car();
-
         System.out.println("\n--- Enter Car Details ---");
         System.out.print("Make: ");
         car.setMake(sc.nextLine());
-
         System.out.print("Model: ");
         car.setModel(sc.nextLine());
-
-        System.out.print("Year of Manufacture: ");
+        System.out.print("Year: ");
         car.setYear(readInt());
-
         System.out.print("Number of Doors: ");
         car.setDoorNumber(readInt());
-
-        System.out.print("Fuel Type (Petrol/Diesel/Electric): ");
+        System.out.print("Fuel Type: ");
         car.setFuelType(sc.nextLine());
 
-        System.out.println("\n--- Car Information ---");
-        System.out.println("Make: " + car.getMake());
-        System.out.println("Model: " + car.getModel());
-        System.out.println("Year: " + car.getYear());
-        System.out.println("Doors: " + car.getDoorNumber());
-        System.out.println("Fuel Type: " + car.getFuelType());
+        vehicles.add(car);
+        System.out.println("✅ Car added successfully!");
     }
 
-    // Create a Motorcycle object and display details
     private void createMotorcycle() {
-        Motorcycle motorcycle = new Motorcycle();
-
+        Motorcycle m = new Motorcycle();
         System.out.println("\n--- Enter Motorcycle Details ---");
         System.out.print("Make: ");
-        motorcycle.setMake(sc.nextLine());
-
+        m.setMake(sc.nextLine());
         System.out.print("Model: ");
-        motorcycle.setModel(sc.nextLine());
-
-        System.out.print("Year of Manufacture: ");
-        motorcycle.setYear(readInt());
-
+        m.setModel(sc.nextLine());
+        System.out.print("Year: ");
+        m.setYear(readInt());
         System.out.print("Number of Wheels: ");
-        motorcycle.setNumberOfWheels(readInt());
+        m.setNumberOfWheels(readInt());
+        System.out.print("Type: ");
+        m.setMotorcycleType(sc.nextLine());
 
-        System.out.print("Motorcycle Type (Sport/Cruiser/Off-road): ");
-        motorcycle.setMotorcycleType(sc.nextLine());
-
-        System.out.println("\n--- Motorcycle Information ---");
-        System.out.println("Make: " + motorcycle.getMake());
-        System.out.println("Model: " + motorcycle.getModel());
-        System.out.println("Year: " + motorcycle.getYear());
-        System.out.println("Wheels: " + motorcycle.getNumberOfWheels());
-        System.out.println("Type: " + motorcycle.getMotorcycleType());
+        vehicles.add(m);
+        System.out.println("✅ Motorcycle added successfully!");
     }
 
-    // Create a Truck object and display details
     private void createTruck() {
-        Truck truck = new Truck();
-
+        Truck t = new Truck();
         System.out.println("\n--- Enter Truck Details ---");
         System.out.print("Make: ");
-        truck.setMake(sc.nextLine());
-
+        t.setMake(sc.nextLine());
         System.out.print("Model: ");
-        truck.setModel(sc.nextLine());
+        t.setModel(sc.nextLine());
+        System.out.print("Year: ");
+        t.setYear(readInt());
+        System.out.print("Cargo Capacity: ");
+        t.setCargoCapacity(sc.nextLine());
+        System.out.print("Transmission: ");
+        t.setTransmissionType(sc.nextLine());
 
-        System.out.print("Year of Manufacture: ");
-        truck.setYear(readInt());
-
-        System.out.print("Cargo Capacity (in tons): ");
-        truck.setCargoCapacity(sc.nextLine());
-
-        System.out.print("Transmission Type (Manual/Automatic): ");
-        truck.setTransmissionType(sc.nextLine());
-
-        System.out.println("\n--- Truck Information ---");
-        System.out.println("Make: " + truck.getMake());
-        System.out.println("Model: " + truck.getModel());
-        System.out.println("Year: " + truck.getYear());
-        System.out.println("Cargo Capacity: " + truck.getCargoCapacity());
-        System.out.println("Transmission: " + truck.getTransmissionType());
+        vehicles.add(t);
+        System.out.println("✅ Truck added successfully!");
     }
 
-    // Safely read integers with exception handling
-    private int readInt() {
-        int value;
-        while (true) {
-            value = sc.nextInt();
-            sc.nextLine(); // consume newline
-            break;
+    private void viewVehicles() {
+        System.out.println("\n===== Stored Vehicles =====");
+        if (vehicles.isEmpty()) {
+            System.out.println("No vehicles have been added yet.");
+        } else {
+            for (int i = 0; i < vehicles.size(); i++) {
+                System.out.println((i + 1) + ". " + vehicles.get(i));
+            }
         }
-        return value;
+    }
+
+    private int readInt() {
+        while (true) {
+            try {
+                int value = Integer.parseInt(sc.nextLine());
+                return value;
+            } catch (NumberFormatException e) {
+                System.out.print("Please enter a valid number: ");
+            }
+        }
     }
 }
