@@ -1,6 +1,9 @@
 import javax.swing.*;
 import java.awt.*;
 
+import javax.swing.*;
+import java.awt.*;
+
 public class Main {
     public static void main(String[] args) {
         // Initialize system with sample data
@@ -11,15 +14,14 @@ public class Main {
         studentSystem.addStudent("Leeanah Tanis", 12, 7);
 
         // Create frame
-        JFrame frame = new JFrame("Student Record Management System");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(500, 400);
-
-        // Create dashboard (GUI)
-        Dashboard dashboard = new Dashboard(studentSystem, frame);
-        frame.add(dashboard.getPanel());
-
-        frame.setVisible(true);
+        SwingUtilities.invokeLater(() -> {
+            JFrame frame = new JFrame("Student Record Management System");
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setSize(400, 350);
+            frame.setLocationRelativeTo(null);
+            frame.setContentPane(new Dashboard(studentSystem, frame).getPanel());
+            frame.setVisible(true);
+        });
     }
 }
 
@@ -31,36 +33,42 @@ class Dashboard {
     public Dashboard(StudentSystem studentSystem, JFrame frame) {
         this.studentSystem = studentSystem;
         this.frame = frame;
-        this.panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
-        String[] buttons = {
-                "1. View all student records",
-                "2. View total number of students",
-                "3. View last ID",
-                "4. Add a new student",
-                "5. Change student details",
-                "6. Find a student by ID",
-                "7. Exit"
-        };
-
-        for (int i = 0; i < buttons.length; i++) {
-            JButton btn = new JButton(buttons[i]);
-            final int index = i;
-            btn.addActionListener(e -> handleAction(index));
-            panel.add(btn);
-        }
+        this.panel = createPanel();
     }
 
     public JPanel getPanel() {
         return panel;
     }
 
+    private JPanel createPanel() {
+        JPanel panel = new JPanel(new GridLayout(0, 1, 5, 5));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+
+        String[] actions = {
+                "View All Students",
+                "Total Students",
+                "Last Student ID",
+                "Add Student",
+                "Update Student",
+                "Find Student by ID",
+                "Exit"
+        };
+
+        for (int i = 0; i < actions.length; i++) {
+            JButton button = new JButton(actions[i]);
+            final int index = i;
+            button.addActionListener(e -> handleAction(index));
+            panel.add(button);
+        }
+
+        return panel;
+    }
+
     private void handleAction(int index) {
         switch (index) {
             case 0 -> viewAllStudents();
-            case 1 -> viewTotalStudents();
-            case 2 -> viewLastId();
+            case 1 -> showMessage("Total Students: " + StudentSystem.totalStudents);
+            case 2 -> showMessage("Last Student ID: " + Student.getLastId());
             case 3 -> addStudent();
             case 4 -> updateStudent();
             case 5 -> findStudent();
@@ -70,104 +78,89 @@ class Dashboard {
 
     private void viewAllStudents() {
         if (StudentSystem.totalStudents == 0) {
-            JOptionPane.showMessageDialog(frame, "No students found.");
+            showMessage("No students found.");
             return;
         }
 
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < StudentSystem.totalStudents; i++) {
             Student s = StudentSystem.students[i];
-            sb.append("ID: ").append(s.getId())
-                    .append(", Name: ").append(s.getName())
-                    .append(", Age: ").append(s.getAge())
-                    .append(", Grade: ").append(s.getGrade())
-                    .append("\n");
+            sb.append(String.format("ID: %d | Name: %s | Age: %d | Grade: %d%n",
+                    s.getId(), s.getName(), s.getAge(), s.getGrade()));
         }
 
-        JOptionPane.showMessageDialog(frame, sb.toString(), "All Students", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    private void viewTotalStudents() {
-        JOptionPane.showMessageDialog(frame, "Total Students: " + StudentSystem.totalStudents);
-    }
-
-    private void viewLastId() {
-        JOptionPane.showMessageDialog(frame, "Last Student ID: " + Student.getLastId());
+        showMessage(sb.toString(), "All Students");
     }
 
     private void addStudent() {
         try {
-            String name = JOptionPane.showInputDialog(frame, "Enter student name:");
+            String name = prompt("Enter student name:");
             if (name == null)
                 return;
-
-            String ageStr = JOptionPane.showInputDialog(frame, "Enter student age:");
-            if (ageStr == null)
-                return;
-            int age = Integer.parseInt(ageStr);
-
-            String gradeStr = JOptionPane.showInputDialog(frame, "Enter student grade:");
-            if (gradeStr == null)
-                return;
-            int grade = Integer.parseInt(gradeStr);
+            int age = Integer.parseInt(prompt("Enter student age:"));
+            int grade = Integer.parseInt(prompt("Enter student grade:"));
 
             studentSystem.addStudent(name, age, grade);
-            JOptionPane.showMessageDialog(frame, "Student added successfully!");
+            showMessage("Student added successfully!");
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(frame, "Invalid input. Please try again.", "Error",
-                    JOptionPane.ERROR_MESSAGE);
+            showError("Invalid input. Please try again.");
         }
     }
 
     private void updateStudent() {
         try {
-            String idStr = JOptionPane.showInputDialog(frame, "Enter student ID to update:");
-            if (idStr == null)
-                return;
-            int id = Integer.parseInt(idStr);
-
+            int id = Integer.parseInt(prompt("Enter student ID to update:"));
             Student student = studentSystem.findStudentById(id);
             if (student == null) {
-                JOptionPane.showMessageDialog(frame, "Student not found!");
+                showMessage("Student not found!");
                 return;
             }
 
-            String field = JOptionPane.showInputDialog(frame, "Enter field to update (name/age/grade):");
-            if (field == null)
-                return;
-            String newValue = JOptionPane.showInputDialog(frame, "Enter new value:");
-            if (newValue == null)
-                return;
-
+            String field = prompt("Enter field to update (name / age / grade):");
+            String newValue = prompt("Enter new value:");
             StudentSystem.updateStudent(student, field, newValue);
-            JOptionPane.showMessageDialog(frame, "Student updated successfully!");
+            showMessage("Student updated successfully!");
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(frame, "Error updating student.", "Error", JOptionPane.ERROR_MESSAGE);
+            showError("Error updating student.");
         }
     }
 
     private void findStudent() {
         try {
-            String idStr = JOptionPane.showInputDialog(frame, "Enter student ID:");
-            if (idStr == null)
-                return;
-            int id = Integer.parseInt(idStr);
-
+            int id = Integer.parseInt(prompt("Enter student ID:"));
             Student s = studentSystem.findStudentById(id);
             if (s == null) {
-                JOptionPane.showMessageDialog(frame, "Student not found.");
+                showMessage("Student not found.");
                 return;
             }
 
-            String info = "ID: " + s.getId() +
-                    "\nName: " + s.getName() +
-                    "\nAge: " + s.getAge() +
-                    "\nGrade: " + s.getGrade();
-
-            JOptionPane.showMessageDialog(frame, info, "Student Info", JOptionPane.INFORMATION_MESSAGE);
+            String info = String.format("""
+                    ID: %d
+                    Name: %s
+                    Age: %d
+                    Grade: %d
+                    """, s.getId(), s.getName(), s.getAge(), s.getGrade());
+            showMessage(info, "Student Info");
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(frame, "Invalid input.", "Error", JOptionPane.ERROR_MESSAGE);
+            showError("Invalid input.");
         }
+    }
+
+    // Helper methods for dialogs
+    private String prompt(String message) {
+        return JOptionPane.showInputDialog(frame, message);
+    }
+
+    private void showMessage(String msg) {
+        JOptionPane.showMessageDialog(frame, msg);
+    }
+
+    private void showMessage(String msg, String title) {
+        JOptionPane.showMessageDialog(frame, msg, title, JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void showError(String msg) {
+        JOptionPane.showMessageDialog(frame, msg, "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
 
