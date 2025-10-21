@@ -8,7 +8,7 @@ public class Main {
         studentSystem.addStudent("Khaled Abbara", 11, 6);
         studentSystem.addStudent("Karel van zijil", 12, 4);
         studentSystem.addStudent("Dana Banana", 8, 2);
-        studentSystem.addStudent("Safa Saber", 12, 7);
+        studentSystem.addStudent("Leeanah Tanis", 12, 7);
 
         // Create frame
         JFrame frame = new JFrame("Student Record Management System");
