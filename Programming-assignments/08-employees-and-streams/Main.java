@@ -29,6 +29,23 @@ public class Main {
         List<String> employeesAbove30 = employees.stream().filter(emp -> emp.getAge() > 30).map(employeeAgeString)
                 .collect(Collectors.toList());
 
+        // Output:
+        System.out.println("\n");
+
+        // Employee, Department list
+        System.out.println("(Employee , department)");
+        employeeStrings.forEach(e -> System.out.println(e));
+        System.out.println("\n");
+
+        // The average salary in the company
+        System.out.println("The average salary at the company is " + averageSalary);
+        System.out.println("\n");
+
+        // Employee, Age list where age is more than 30
+        System.out.println("(Employee, Age > 30)");
+        employeesAbove30.forEach(e -> System.out.println(e));
+        System.out.println("\n");
+
     }
 }
 
