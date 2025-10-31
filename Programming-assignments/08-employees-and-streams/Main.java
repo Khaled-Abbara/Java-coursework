@@ -1,3 +1,83 @@
+/*
+================================================================================
+PROGRAM DOCUMENTATION
+================================================================================
+
+INTRODUCTION
+------------
+This Java program demonstrates the use of Java Streams, Functional Interfaces,
+and Lambda Expressions to manipulate and analyze a list of employee data.
+It focuses on transforming, filtering, and aggregating employee information
+in a functional programming style.
+
+CORE FUNCTIONALITIES
+--------------------
+1. Display each employee’s name with their respective department.
+2. Compute the average salary across all employees.
+3. Display a list of employees older than 30 (with their name and age).
+4. Display employees older than 28 who work in the IT department.
+5. Display names of employees whose names start with 'K'.
+
+HOW TO RUN THE PROGRAM
+----------------------
+1. Ensure Java (JDK 8 or higher) is installed on your system.
+2. Save this file as `Main.java`.
+3. Compile the program using:
+       javac Main.java
+4. Run the compiled class using:
+       java Main
+5. The output will be printed in the console window.
+
+PROGRAM STRUCTURE OVERVIEW
+--------------------------
+- Class `Employee`: Represents an employee entity with name, age,
+  department, and salary fields, including standard getters and setters.
+- Class `Main`: Contains the `main()` method, which initializes data,
+  defines functional mappings, applies stream operations, and prints results.
+
+MAIN PROGRAM AND SYSTEM FLOW
+----------------------------
+1. Create a list of `Employee` objects with sample data.
+2. Use functional mappings and stream operations to:
+   - Map employees to specific string representations.
+   - Filter employees based on age, department, or name.
+   - Compute the average salary.
+3. Collect and print results for each transformation.
+
+CODE QUALITY AND DESIGN PRINCIPLES
+----------------------------------
+- Uses Java Streams API for concise and readable data manipulation.
+- Demonstrates the separation of data (Employee class) and logic (Main class).
+- Employs Functional Interfaces (`Function<Employee, String>`) to improve
+  modularity and reusability.
+- Encourages immutability and stateless operations within stream pipelines.
+
+DOCUMENTATION AND CODE MAINTENANCE
+----------------------------------
+- All major operations and logic steps are clearly commented.
+- The code follows a clear and consistent naming convention.
+- Modular design allows easy expansion (e.g., adding new filters or operations).
+- The `Employee` class is designed for reusability in other contexts.
+
+LEARNING OUTCOMES AND REFLECTION
+--------------------------------
+Through this program, I learned:
+- Understand how to use Java Streams for data filtering, mapping, and aggregation.
+- the advantages of functional programming techniques in Java.
+- Gain experience in designing clear, maintainable, and well-documented code.
+
+REFLECTION
+--------------------------------
+Having previously learned React, I was already familiar with 
+concepts like method chaining and the use of lambda functions. 
+Working on this Java program felt refreshing because Java Streams 
+follow a similar functional programming style. It was interesting to see how these patterns, 
+which I had used extensively in JavaScript, can be applied effectively in Java 
+to write cleaner, more concise, and expressive code.
+
+================================================================================
+*/
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
