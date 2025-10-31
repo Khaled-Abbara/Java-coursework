@@ -5,8 +5,9 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
 
+        // Sample data to work on
         List<Employee> employees = Arrays.asList(
-                new Employee("Dana", 28, "HR", 50000),
+                new Employee("Dana", 28, "Programming", 50000),
                 new Employee("Prakash", 35, "IT", 70000),
                 new Employee("Khaled", 40, "Finance", 60000),
                 new Employee("Leeanah", 31, "IT", 65000),
