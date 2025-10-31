@@ -1,5 +1,6 @@
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -10,11 +11,12 @@ public class Main {
                 new Employee("Dana", 28, "Programming", 50000),
                 new Employee("Prakash", 35, "IT", 70000),
                 new Employee("Khaled", 40, "Finance", 60000),
-                new Employee("Leeanah", 31, "IT", 65000),
+                new Employee("Majed", 23, "IT", 56000),
+                new Employee("Leeanah", 29, "IT", 65000),
                 new Employee("Karel", 25, "Programming", 58000));
 
         // Function to change employee object to String that contains name, department.
-        Function<Employee, String> employeeDepartmentString = emp -> emp.getName() + " , " + emp.getDepartment();
+        Function<Employee, String> employeeDepartmentString = e -> e.getName() + " , " + e.getDepartment();
 
         // The use of streams to create a new list of concatenated strings
         List<String> employeeStrings = employees.stream().map(employeeDepartmentString).collect(Collectors.toList());
@@ -23,14 +25,21 @@ public class Main {
         double averageSalary = employees.stream().mapToDouble(Employee::getSalary).average().orElse(0.0);
 
         // Function to change employee object to a String that contains name, age.
-        Function<Employee, String> employeeAgeString = emp -> emp.getName() + ", " + emp.getAge();
+        Function<Employee, String> employeeAgeString = e -> e.getName() + ", " + e.getAge();
 
         // The use of streams to create a new list of concatenated strings where the
         // employee age is above 30
         List<String> employeesAbove30 = employees.stream().filter(emp -> emp.getAge() > 30).map(employeeAgeString)
                 .collect(Collectors.toList());
 
-        // Output:
+        Function<Employee, String> employeeAgeDepartmentString = e -> e.getName() + ", " + e.getAge() + ", "
+                + e.getDepartment();
+
+        List<String> employeesAbove28AndIT = employees.stream()
+                .filter(emp -> emp.getAge() > 28 && emp.getDepartment() == "IT").map(employeeAgeDepartmentString)
+                .collect(Collectors.toList());
+
+        // ============================== Output ==============================
         System.out.println("\n");
 
         // Employee, Department list
@@ -47,6 +56,9 @@ public class Main {
         employeesAbove30.forEach(e -> System.out.println(e));
         System.out.println("\n");
 
+        System.out.println("(Employee, Age > 28, Department = IT)");
+        employeesAbove28AndIT.forEach(e -> System.out.println(e));
+        System.out.println("\n");
     }
 }
 
