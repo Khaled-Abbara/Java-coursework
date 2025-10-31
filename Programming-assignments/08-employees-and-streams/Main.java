@@ -1,6 +1,5 @@
 import java.util.*;
 import java.util.function.Function;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -38,10 +37,15 @@ public class Main {
                 + e.getDepartment();
 
         // The use of streams to create a new list of concatenated strings where the
-        // employee age is above 30
+        // employee age is above 28 and works in the "IT" department.
         List<String> employeesAbove28AndIT = employees.stream()
                 .filter(emp -> emp.getAge() > 28 && emp.getDepartment() == "IT").map(employeeAgeDepartmentString)
                 .collect(Collectors.toList());
+
+        // The use of streams to create a new list of string name where the
+        // employee's name starts with 'K'
+        List<String> employeesStartWithK = employees.stream().filter(emp -> emp.getName().startsWith("K"))
+                .map(emp -> emp.getName()).collect(Collectors.toList());
 
         // ============================== Output ==============================
         System.out.println("\n");
@@ -62,6 +66,10 @@ public class Main {
 
         System.out.println("(Employee, Age > 28, Department = IT)");
         employeesAbove28AndIT.forEach(e -> System.out.println(e));
+        System.out.println("\n");
+
+        System.out.println("(Employee starts with 'K')");
+        employeesStartWithK.forEach(e -> System.out.println(e));
         System.out.println("\n");
     }
 }
