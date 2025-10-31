@@ -34,7 +34,7 @@ public class Main {
         System.out.println("\n");
 
         // Employee, Department list
-        System.out.println("(Employee , department)");
+        System.out.println("(Employee , Department)");
         employeeStrings.forEach(e -> System.out.println(e));
         System.out.println("\n");
 
