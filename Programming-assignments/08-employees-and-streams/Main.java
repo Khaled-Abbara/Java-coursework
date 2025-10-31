@@ -1,3 +1,36 @@
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+public class Main {
+    public static void main(String[] args) {
+
+        List<Employee> employees = Arrays.asList(
+                new Employee("Dana", 28, "HR", 50000),
+                new Employee("Prakash", 35, "IT", 70000),
+                new Employee("Khaled", 40, "Finance", 60000),
+                new Employee("Leeanah", 31, "IT", 65000),
+                new Employee("Karel", 25, "Programming", 58000));
+
+        // Function to change employee object to String that contains name, department.
+        Function<Employee, String> employeeDepartmentString = emp -> emp.getName() + " , " + emp.getDepartment();
+
+        // The use of streams to create a new list of concatenated strings
+        List<String> employeeStrings = employees.stream().map(employeeDepartmentString).collect(Collectors.toList());
+
+        // The use of streams to create a new variable that stores the average Salary
+        double averageSalary = employees.stream().mapToDouble(Employee::getSalary).average().orElse(0.0);
+
+        // Function to change employee object to a String that contains name, age.
+        Function<Employee, String> employeeAgeString = emp -> emp.getName() + ", " + emp.getAge();
+
+        // The use of streams to create a new list of concatenated strings where the
+        // employee age is above 30
+        List<String> employeesAbove30 = employees.stream().filter(emp -> emp.getAge() > 30).map(employeeAgeString)
+                .collect(Collectors.toList());
+
+    }
+}
 
 // simple employee object
 class Employee {
