@@ -1,3 +1,251 @@
+
+/**
+ * ================================================================
+ *                 STUDENT RECORD MANAGEMENT SYSTEM (SRMS)
+ * ================================================================
+ *
+ *
+ * ---------------------------------------------------------------
+ * 1. INTRODUCTION
+ * ---------------------------------------------------------------
+ * The Student Record Management System (SRMS) is a **Java Swing-based**
+ * desktop application designed to manage and visualize student data.
+ * It serves as an educational demonstration of how Java Swing can be
+ * used to build interactive graphical user interfaces integrated with
+ * backend logic written using core Object-Oriented Programming (OOP)
+ * principles.
+ *
+ * The program showcases the combination of **Swing components** such as
+ * JFrame, JPanel, JButton, JTable, and JOptionPane with Java classes and
+ * methods for managing and manipulating student records. It provides a
+ * dynamic and user-friendly interface for performing CRUD-like operations
+ * (Create, Read, Update, Delete) on student information.
+ *
+ * ---------------------------------------------------------------
+ * 2. CORE FUNCTIONALITIES
+ * ---------------------------------------------------------------
+ * The Student Record Management System (SRMS) offers the following
+ * capabilities through Java Swing GUI components:
+ *
+ *   • View all student records displayed in a styled JTable.
+ *   • Add new students using Swing input dialogs.
+ *   • Update existing student records dynamically through user input.
+ *   • Find and display student information by unique ID.
+ *   • View system statistics such as total number of students and
+ *     last registered student ID.
+ *   • Exit the application gracefully using an “Exit” button.
+ *
+ * Each functionality is fully integrated into the Swing interface,
+ * allowing real-time user interaction without any console commands.
+ *
+ * ---------------------------------------------------------------
+ * 3. HOW TO RUN THE PROGRAM
+ * ---------------------------------------------------------------
+ * Step 1: Save the file as "Main.java".
+ *
+ * Step 2: Compile the source code:
+ *         > javac Main.java
+ *
+ * Step 3: Run the application:
+ *         > java Main
+ *
+ * Step 4: A Java Swing window titled “Student Record Management System”
+ *         will open, displaying a dashboard with buttons for each
+ *         functionality:
+ *           1. View All Students
+ *           2. Total Students
+ *           3. Last Student ID
+ *           4. Add Student
+ *           5. Update Student
+ *           6. Find Student by ID
+ *           7. Exit
+ *
+ * Each action launches a corresponding Swing dialog or table interface.
+ *
+ * ---------------------------------------------------------------
+ * 4. PROGRAM STRUCTURE OVERVIEW
+ * ---------------------------------------------------------------
+ * The SRMS is built with a clear separation between **frontend (Swing GUI)**
+ * and **backend (OOP logic)** components:
+ *
+ * (a) Main
+ *     • Serves as the entry point.
+ *     • Initializes sample data and launches the GUI thread.
+ *
+ * (b) Dashboard (Swing Layer)
+ *     • Implements the graphical interface using Swing.
+ *     • Organizes buttons and actions via GridLayout.
+ *     • Connects user events to backend logic.
+ *
+ * (c) Student (Model Layer)
+ *     • Represents individual student records.
+ *     • Defines fields: ID, name, age, and grade.
+ *     • Provides getter and setter methods for encapsulation.
+ *
+ * (d) StudentSystem (Logic Layer)
+ *     • Handles data storage, retrieval, and updates.
+ *     • Maintains student arrays and system statistics.
+ *
+ * ---------------------------------------------------------------
+ * 5. INTERFACE DESIGN (USING JAVA SWING)
+ * ---------------------------------------------------------------
+ * The SRMS interface is constructed entirely with **Java Swing** components,
+ * providing a clean, dark-themed, and modern look:
+ *
+ *   • JFrame – Main application window.
+ *   • JPanel – Container for layout and organization of controls.
+ *   • JButton – Trigger specific system operations.
+ *   • JTable – Displays student data in a scrollable table view.
+ *   • JScrollPane – Enables smooth scrolling for large data sets.
+ *   • JOptionPane – Facilitates message dialogs and user input prompts.
+ *
+ * The design uses custom color schemes for an elegant, consistent feel:
+ *   - Background Color: (40, 44, 52)
+ *   - Button Color: (60, 63, 70)
+ *   - Text Color: (220, 220, 220)
+ *   - Accent Color: (85, 170, 255)
+ *
+ * Fonts and table styling further enhance readability and visual clarity.
+ *
+ * ---------------------------------------------------------------
+ * 6. CLASS IMPLEMENTATION
+ * ---------------------------------------------------------------
+ * (a) Student Class:
+ *     • Represents a single student object.
+ *     • Contains private fields with public getter/setter methods.
+ *     • Uses a static counter for generating unique student IDs.
+ *
+ * (b) StudentSystem Class:
+ *     • Maintains a static array of Student objects.
+ *     • Provides core methods for:
+ *         - Adding new students.
+ *         - Finding students by ID.
+ *         - Updating existing records.
+ *     • Displays error dialogs using Swing when capacity limits or
+ *       invalid inputs occur.
+ *
+ * (c) Dashboard Class:
+ *     • Central GUI controller built with Java Swing.
+ *     • Creates and styles all visual components.
+ *     • Uses event listeners for button actions.
+ *     • Employs helper methods for data interaction and dialog management:
+ *         - viewAllStudents()
+ *         - addStudent()
+ *         - updateStudent()
+ *         - findStudent()
+ *         - showMessage(), showError(), and prompt()
+ *     • Uses JTable to render all students in a structured view.
+ *
+ * (d) Main Class:
+ *     • Initializes the StudentSystem and sample data.
+ *     • Invokes the Dashboard inside SwingUtilities.invokeLater() to ensure
+ *       thread-safe GUI rendering.
+ *
+ * ---------------------------------------------------------------
+ * 7. MAIN PROGRAM AND SYSTEM FLOW
+ * ---------------------------------------------------------------
+ * Program execution follows a Swing-driven, event-based model:
+ *
+ *   1. The application starts from Main and sets up sample data.
+ *   2. The Dashboard JFrame and JPanel are initialized and displayed.
+ *   3. Each button on the dashboard is linked to an ActionListener.
+ *   4. When a button is clicked, the corresponding method executes and
+ *      interacts with the StudentSystem backend.
+ *   5. Swing dialogs (JOptionPane) or tables (JTable) display the results.
+ *   6. The application remains active until the user selects “Exit.”
+ *
+ * This flow highlights Swing’s event-driven architecture and GUI responsiveness.
+ *
+ * ---------------------------------------------------------------
+ * 8. CODE QUALITY AND DESIGN PRINCIPLES
+ * ---------------------------------------------------------------
+ * The SRMS follows clean coding and design principles:
+ *
+ *   • Separation of Concerns:
+ *       - Swing interface and backend logic are clearly divided.
+ *
+ *   • Encapsulation:
+ *       - Private data fields in Student class with controlled access.
+ *
+ *   • Modularity:
+ *       - Dashboard, Student, and StudentSystem classes serve distinct roles.
+ *
+ *   • Reusability:
+ *       - Reusable Swing helper methods (prompt, showMessage, styleTable).
+ *
+ *   • Thread Safety:
+ *       - GUI initialization is handled through SwingUtilities.invokeLater().
+ *
+ *   • Consistent Aesthetics:
+ *       - Unified dark theme and consistent font choices for visual coherence.
+ *
+ * ---------------------------------------------------------------
+ * 9. ERROR HANDLING AND VALIDATION
+ * ---------------------------------------------------------------
+ * The system employs error-handling techniques to maintain GUI stability:
+ *
+ *   • Input Validation:
+ *       - Swing input dialogs verify correct numeric values for age/grade.
+ *       - Prevents null or invalid user responses.
+ *
+ *   • Exception Handling:
+ *       - try-catch blocks protect against invalid conversions.
+ *       - JOptionPane error dialogs provide user-friendly feedback.
+ *
+ *   • System Integrity:
+ *       - Ensures student array does not exceed its allocated capacity.
+ *       - Prevents invalid field updates in StudentSystem.
+ *
+ * These mechanisms ensure a smooth, crash-free Swing experience for users.
+ *
+ * ---------------------------------------------------------------
+ * 10. DOCUMENTATION AND CODE MAINTENANCE
+ * ---------------------------------------------------------------
+ * The SRMS codebase is well-structured for readability and maintenance:
+ *
+ *   • Inline documentation clarifies purpose and logic.
+ *   • Method names clearly describe their function.
+ *   • Follows standard Swing and Java conventions for GUI development.
+ *   • Can be easily extended with features such as:
+ *       - Persistent file or database storage.
+ *       - Sorting or filtering student records in JTable.
+ *       - Real-time UI updates via Swing event threads.
+ *
+ * ---------------------------------------------------------------
+ * 11. LEARNING OUTCOMES AND REFLECTION
+ * ---------------------------------------------------------------
+ * Developing this Java Swing project strengthens understanding of:
+ *
+ *   • Swing GUI design and layout management.
+ *   • Event-driven programming and action handling.
+ *   • Object-oriented principles in interactive applications.
+ *   • Data validation and user feedback in GUI contexts.
+ *   • Bridging backend logic with responsive visual interfaces.
+ *
+ * Reflection:
+ *   • Demonstrates how Swing remains a powerful GUI toolkit in Java.
+ *   • Encourages modular, maintainable design for future JavaFX or web transitions.
+ *
+ * ---------------------------------------------------------------
+ * 12. CONCLUSION
+ * ---------------------------------------------------------------
+ * The Student Record Management System (SRMS) effectively merges the
+ * **power of Java Swing** with structured, object-oriented programming
+ * principles. It stands as an example of how desktop GUI applications can
+ * deliver both functionality and an engaging user experience.
+ *
+ * Key Takeaways:
+ *   • Swing enables rapid development of user-friendly interfaces.
+ *   • Encapsulation and modularity simplify maintenance.
+ *   • Validation and feedback enhance application reliability.
+ *
+ * Overall, SRMS showcases how a well-designed Java Swing application can
+ * integrate data management, visual presentation, and user interaction into
+ * a cohesive and educational software solution.
+ *
+ * ================================================================
+ */
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
