@@ -102,6 +102,7 @@ public class Main {
 
         // The use of streams to create a new variable that stores the average Salary
         double averageSalary = employees.stream().mapToDouble(Employee::getSalary).average().orElse(0.0);
+        averageSalary = Math.round(averageSalary * 100.0) / 100.0;
 
         // Function to change employee object to a String that contains name, age.
         Function<Employee, String> employeeAgeString = e -> e.getName() + ", " + e.getAge();
